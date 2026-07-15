@@ -138,7 +138,7 @@ export default function Home() {
   const [activeTopic, setActiveTopic] = useState("all");
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
   const [mounted, setMounted] = useState(false);
   
   // Live Feed Data State
@@ -214,7 +214,7 @@ export default function Home() {
   // Initialize theme from localStorage on client side mount
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem("theme") || "light";
+    const savedTheme = localStorage.getItem("theme") || "dark";
     setTheme(savedTheme);
     if (savedTheme === "dark") {
       document.documentElement.classList.add("dark-theme");

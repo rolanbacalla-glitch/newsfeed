@@ -19,7 +19,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${lfcSerif.variable} ${lfcSans.variable}`}>
+    <html lang="en" className={`dark-theme ${lfcSerif.variable} ${lfcSans.variable}`}>
       <body>{children}</body>
     </html>
   );
