@@ -1,0 +1,228 @@
+.card {
+  padding: 20px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subTopicBadge {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background-color: var(--border-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.rightHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.urgencyBadge {
+  background-color: var(--accent-glow);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color-active);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  animation: pulse 2s infinite;
+}
+
+.timeText {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.titleLink {
+  display: inline-block;
+}
+
+.headline {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+}
+
+.titleLink:hover .headline {
+  color: var(--accent);
+}
+
+.summary {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.sourceFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.primarySourceInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sourceDot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.sourceName {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.sourceName strong {
+  color: var(--text-secondary);
+}
+
+.expandButton {
+  background: var(--border-color);
+  border: 1px solid transparent;
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  transition: all 0.2s ease;
+}
+
+.expandButton:hover {
+  background: var(--accent);
+  color: var(--bg-app);
+}
+
+.arrowIcon {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.expandButton.expanded .arrowIcon {
+  transform: rotate(180deg);
+}
+
+.coverageDropdown {
+  margin-top: 8px;
+  padding: 14px;
+  background-color: var(--bg-sidebar);
+  border: 1px dashed var(--border-color);
+  border-radius: 10px;
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+.dropdownHeading {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.secondaryList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.secondaryItem {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.secondaryItem:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.secondaryLink {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.secondaryLink:hover {
+  color: var(--accent);
+}
+
+.secondarySource {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.secondaryTitle {
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.secondaryTime {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .secondaryLink {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  
+  .secondaryTime {
+    text-align: left;
+    margin-top: 2px;
+  }
+}
