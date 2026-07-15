@@ -143,6 +143,9 @@ export default function Home() {
   
   // Live Feed Data State
   const [feed, setFeed] = useState([]);
+  const [lastUpdated, setLastUpdated] = useState(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [refreshCountdown, setRefreshCountdown] = useState(300);
   
   // Scoreboard match state
   const [match, setMatch] = useState(null);
@@ -241,6 +244,8 @@ export default function Home() {
       if (!isSilent) {
         setLoading(true);
         setError(null);
+      } else {
+        setIsRefreshing(true);
       }
       try {
         const queryTopic = activeTopic === "all" ? "Liverpool FC" : activeTopic;
@@ -254,6 +259,8 @@ export default function Home() {
         }
         if (active) {
           setFeed(data);
+          setLastUpdated(new Date());
+          setRefreshCountdown(300);
         }
       } catch (err) {
         console.error(err);
@@ -263,6 +270,9 @@ export default function Home() {
       } finally {
         if (!isSilent && active) {
           setLoading(false);
+        }
+        if (active) {
+          setIsRefreshing(false);
         }
       }
     };
@@ -281,6 +291,46 @@ export default function Home() {
       };
     }
   }, [activeTopic, mounted]);
+
+  // Countdown timer — ticks every second, resets when refreshCountdown is reset
+  useEffect(() => {
+    if (refreshCountdown <= 0) return;
+    const t = setTimeout(() => setRefreshCountdown((c) => Math.max(0, c - 1)), 1000);
+    return () => clearTimeout(t);
+  }, [refreshCountdown]);
+
+  // Manual refresh handler
+  const handleManualRefresh = async () => {
+    if (isRefreshing || loading) return;
+    setIsRefreshing(true);
+    try {
+      const queryTopic = activeTopic === "all" ? "Liverpool FC" : activeTopic;
+      const res = await fetch(`/api/news?topic=${encodeURIComponent(queryTopic)}`);
+      if (!res.ok) throw new Error(`Server error ${res.status}`);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      setFeed(data);
+      setLastUpdated(new Date());
+      setRefreshCountdown(300);
+    } catch (err) {
+      console.error("Manual refresh error:", err);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  // Helper to format the last-updated time
+  const formatLastUpdated = (date) => {
+    if (!date) return null;
+    return date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+  };
+
+  // Helper to format countdown as mm:ss
+  const formatCountdown = (secs) => {
+    const m = Math.floor(secs / 60).toString().padStart(2, "0");
+    const s = (secs % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  };
 
   // Client-side search and category filtering
   const filteredFeed = feed.filter((story) => {
@@ -343,12 +393,33 @@ export default function Home() {
           </div>
 
           <div className={styles.statsIndicator}>
-            <span className={styles.statusDot}></span>
+            <span className={`${styles.statusDot} ${isRefreshing ? styles.statusDotRefreshing : ""}`}></span>
             <span className={styles.statsText}>
               Anfield Engine: {loading ? <strong>Updating Feed...</strong> : <strong>Live Stream</strong>} &bull; Clustered{" "}
               <strong>{totalNarratives}</strong> LFC narratives from{" "}
               <strong>{totalPublishers}</strong> newsrooms
             </span>
+            {!loading && lastUpdated && (
+              <span className={styles.refreshMeta}>
+                Updated {formatLastUpdated(lastUpdated)}
+                <span className={styles.refreshCountdown}>
+                  &nbsp;&bull; next in {formatCountdown(refreshCountdown)}
+                </span>
+              </span>
+            )}
+            <button
+              id="manual-refresh-btn"
+              className={`${styles.refreshBtn} ${isRefreshing ? styles.refreshBtnSpinning : ""}`}
+              onClick={handleManualRefresh}
+              disabled={loading || isRefreshing}
+              title="Refresh feed now"
+              aria-label="Refresh news feed"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="23 4 23 10 17 10" />
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+              </svg>
+            </button>
           </div>
         </header>
 
