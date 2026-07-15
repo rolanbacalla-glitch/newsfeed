@@ -5,6 +5,135 @@ import Sidebar from "../components/Sidebar";
 import StoryCard from "../components/StoryCard";
 import styles from "./page.module.css";
 
+const TeamCrest = ({ teamName }) => {
+  const name = teamName ? teamName.toLowerCase() : "";
+  if (name.includes("liverpool")) {
+    return (
+      <div className={styles.crestWrapper}>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="hsl(0, 0%, 20%)" />
+          <path d="M16 3.5C11 3.5 8 6.5 8 11.5c0 7 5 14 8 16.5 3-2.5 8-9.5 8-16.5 0-5-3-8-8-8z" fill="#fff" opacity="0.15" />
+          {/* Stylized Liverbird silhouette in monochrome */}
+          <path d="M16 8.5c-.3 0-.6.1-.7.4-.2.4-.2.8-.1 1.2l.3.8-.5.4c-.4.3-.5.7-.3 1.1.2.4.6.6 1 .5l.7-.1.2.6c.1.4.5.7.9.6.4-.1.6-.5.5-.9l-.2-.8.5-.3c.4-.3.5-.7.3-1.1-.1-.3-.4-.5-.7-.6l-.7.1-.2-.6c-.1-.4-.5-.7-.9-.6z" fill="hsl(0, 0%, 90%)" />
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="hsl(0, 0%, 40%)" strokeWidth="1.5" />
+        </svg>
+      </div>
+    );
+  }
+  if (name.includes("sunderland")) {
+    return (
+      <div className={styles.crestWrapper}>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="hsl(0, 0%, 30%)" />
+          {/* Monochrome stripes */}
+          <path d="M11 6v14M16 4.5v17.5M21 6v14" stroke="#ffffff" strokeWidth="2.5" opacity="0.8" />
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="hsl(0, 0%, 60%)" strokeWidth="1.5" />
+        </svg>
+      </div>
+    );
+  }
+  if (name.includes("wrexham")) {
+    return (
+      <div className={styles.crestWrapper}>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="hsl(0, 0%, 40%)" />
+          <circle cx="16" cy="16.5" r="5" fill="hsl(0, 0%, 20%)" />
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#ffffff" strokeWidth="1.5" />
+        </svg>
+      </div>
+    );
+  }
+  if (name.includes("arsenal")) {
+    return (
+      <div className={styles.crestWrapper}>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="hsl(0, 0%, 25%)" />
+          {/* Cannon shape */}
+          <path d="M11 16h8M19 14.5v3M13 14.5v3" stroke="hsl(0, 0%, 90%)" strokeWidth="1.5" />
+          <circle cx="16" cy="16" r="2.5" stroke="hsl(0, 0%, 90%)" strokeWidth="1.5" fill="none" />
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#ffffff" strokeWidth="1.5" />
+        </svg>
+      </div>
+    );
+  }
+  if (name.includes("leeds")) {
+    return (
+      <div className={styles.crestWrapper}>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="#ffffff" />
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="hsl(0, 0%, 20%)" strokeWidth="2" />
+        </svg>
+      </div>
+    );
+  }
+  if (name.includes("monaco")) {
+    return (
+      <div className={styles.crestWrapper}>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="hsl(0, 0%, 35%)" />
+          <path d="M7 11l18 18V11H7z" fill="#ffffff" opacity="0.3" />
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="hsl(0, 0%, 60%)" strokeWidth="1.5" />
+        </svg>
+      </div>
+    );
+  }
+  if (name.includes("como")) {
+    return (
+      <div className={styles.crestWrapper}>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="hsl(0, 0%, 15%)" />
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#ffffff" strokeWidth="1.5" />
+        </svg>
+      </div>
+    );
+  }
+  if (name.includes("newcastle")) {
+    return (
+      <div className={styles.crestWrapper}>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="#ffffff" />
+          <path d="M10 6v14M16 4.5v17.5M22 6v14" stroke="hsl(0, 0%, 10%)" strokeWidth="3" />
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="hsl(0, 0%, 50%)" strokeWidth="1.5" />
+        </svg>
+      </div>
+    );
+  }
+  if (name.includes("nottingham") || name.includes("forest")) {
+    return (
+      <div className={styles.crestWrapper}>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="hsl(0, 0%, 30%)" />
+          {/* Tree shape */}
+          <path d="M16 8l-5 6h3v5h4v-5h3l-5-6z" fill="#ffffff" />
+          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="hsl(0, 0%, 40%)" strokeWidth="1.5" />
+        </svg>
+      </div>
+    );
+  }
+  return (
+    <div className={styles.crestWrapper}>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="hsl(0, 0%, 50%)" />
+        <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="hsl(0, 0%, 80%)" strokeWidth="1.5" />
+      </svg>
+    </div>
+  );
+};
+
+const formatKickoffDate = (isoString) => {
+  if (!isoString) return "";
+  try {
+    const displayDate = new Date(isoString);
+    const weekday = displayDate.toLocaleDateString("en-GB", { weekday: "short" }).toUpperCase();
+    const day = displayDate.getDate();
+    const month = displayDate.toLocaleDateString("en-GB", { month: "long" }).toUpperCase();
+    const hoursMins = displayDate.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "UTC" });
+    return `${weekday} ${day} ${month} — ${hoursMins}`;
+  } catch (e) {
+    return "";
+  }
+};
+
 export default function Home() {
   const [activeTopic, setActiveTopic] = useState("all");
   const [activeCategory, setActiveCategory] = useState("All");
@@ -47,11 +176,11 @@ export default function Home() {
   }, [mounted]);
 
   // Client-side match countdown logic
-  const [countdownText, setCountdownText] = useState("");
+  const [countdownValues, setCountdownValues] = useState(null);
 
   useEffect(() => {
     if (!match || match.status !== "SCHEDULED" || !match.kickoffISO) {
-      setCountdownText("");
+      setCountdownValues(null);
       return;
     }
 
@@ -62,7 +191,7 @@ export default function Home() {
       const diff = targetTime - nowTime;
 
       if (diff <= 0) {
-        setCountdownText("Match starting...");
+        setCountdownValues(null);
         return;
       }
 
@@ -71,11 +200,7 @@ export default function Home() {
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-      let text = "";
-      if (days > 0) text += `${days}d `;
-      if (hours > 0 || days > 0) text += `${hours}h `;
-      text += `${minutes}m ${seconds}s`;
-      setCountdownText(text);
+      setCountdownValues({ days, hours, minutes, seconds });
     };
 
     updateCountdown();
@@ -258,36 +383,84 @@ export default function Home() {
           {/* Match Scoreboard Banner */}
           {match && (
             <div className={styles.scoreboardContainer}>
-              <div className={styles.scoreboardMain}>
-                <div className={styles.scoreboardLeft}>
-                  <span className={styles.scoreboardCompetition}>
-                    {match.competition} &bull; {match.formattedDate}
+              <div className={styles.scoreboardHeader}>
+                <span className={styles.competitionLabel}>{match.competition}</span>
+                <span className={styles.headerDetail}>
+                  <span className={styles.headerDetailIcon}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: "inline-block", verticalAlign: "middle" }}>
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                  </span>{" "}
+                  {formatKickoffDate(match.kickoffISO)}
+                </span>
+                {match.venue && (
+                  <span className={styles.headerDetail}>
+                    <span className={styles.headerDetailIcon}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: "inline-block", verticalAlign: "middle" }}>
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                      </svg>
+                    </span>{" "}
+                    {match.venue.toUpperCase()}
                   </span>
-                  <div className={styles.scoreboardTeams}>
-                    <span className={`${styles.teamName} ${match.homeTeam === "Liverpool" ? styles.highlightLfc : ""}`}>
+                )}
+              </div>
+
+              <div className={styles.scoreboardBody}>
+                <div className={styles.teamsStackedList}>
+                  <div className={styles.teamRow}>
+                    <TeamCrest teamName={match.homeTeam} />
+                    <span className={`${styles.teamNameStacked} ${match.homeTeam === "Liverpool" ? styles.highlightLfc : ""}`}>
                       {match.homeTeam}
                     </span>
-                    <span className={styles.scoreDisplay}>
-                      {match.status === "SCHEDULED" ? "v" : `${match.homeScore} - ${match.awayScore}`}
-                    </span>
-                    <span className={`${styles.teamName} ${match.awayTeam === "Liverpool" ? styles.highlightLfc : ""}`}>
+                    {(match.status === "LIVE" || match.status === "FINISHED") && (
+                      <span className={styles.teamScoreStacked}>{match.homeScore}</span>
+                    )}
+                  </div>
+                  <div className={styles.teamRow}>
+                    <TeamCrest teamName={match.awayTeam} />
+                    <span className={`${styles.teamNameStacked} ${match.awayTeam === "Liverpool" ? styles.highlightLfc : ""}`}>
                       {match.awayTeam}
                     </span>
+                    {(match.status === "LIVE" || match.status === "FINISHED") && (
+                      <span className={styles.teamScoreStacked}>{match.awayScore}</span>
+                    )}
                   </div>
                 </div>
-                <div className={styles.scoreboardRight}>
-                  <div className={styles.scoreboardRightRow}>
-                    {match.status === "LIVE" && <span className={styles.liveBadge}>LIVE</span>}
-                    <span className={styles.timeBadge}>{match.matchTime}</span>
+
+                {match.status === "SCHEDULED" && countdownValues ? (
+                  <div className={styles.countdownColumn}>
+                    <div className={styles.countdownItem}>
+                      <span className={styles.countdownCircle}>{countdownValues.days}</span>
+                      <span className={styles.countdownLabel}>DAYS</span>
+                    </div>
+                    <div className={styles.countdownItem}>
+                      <span className={styles.countdownCircle}>{countdownValues.hours}</span>
+                      <span className={styles.countdownLabel}>HRS</span>
+                    </div>
+                    <div className={styles.countdownItem}>
+                      <span className={styles.countdownCircle}>{countdownValues.minutes}</span>
+                      <span className={styles.countdownLabel}>MIN</span>
+                    </div>
+                    <div className={styles.countdownItem}>
+                      <span className={styles.countdownCircle}>{countdownValues.seconds}</span>
+                      <span className={styles.countdownLabel}>SEC</span>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className={styles.statusColumn}>
+                    {match.status === "LIVE" ? (
+                      <span className={styles.liveBadgeLarge}>LIVE</span>
+                    ) : (
+                      <span className={styles.finishedBadge}>FT</span>
+                    )}
+                    <span className={styles.matchTimeLabelLarge}>{match.matchTime}</span>
+                  </div>
+                )}
               </div>
-              {countdownText && (
-                <div className={styles.scoreboardCountdownRow}>
-                  <span className={styles.countdownIcon}>⏱️</span>
-                  <span>Match kicks off in: <strong className={styles.countdownValue}>{countdownText}</strong></span>
-                </div>
-              )}
             </div>
           )}
 

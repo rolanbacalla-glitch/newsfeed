@@ -257,157 +257,208 @@
 }
 
 .scoreboardContainer {
-  margin-bottom: 24px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, var(--accent-glow) 0%, var(--bg-card) 100%);
-  border-left: 4px solid var(--accent);
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
-  animation: fadeIn 0.4s ease-out;
   overflow: hidden;
+  animation: fadeIn 0.4s ease-out;
 }
 
-.scoreboardMain {
-  padding: 16px 24px;
+.scoreboardHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.competitionLabel {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.headerDetail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.headerDetailIcon {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+}
+
+.scoreboardBody {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  padding: 24px;
+  gap: 24px;
 }
 
-.scoreboardLeft {
+/* Left: Staged/stacked teams column */
+.teamsStackedList {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 16px;
+  flex-grow: 1;
 }
 
-.scoreboardCompetition {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  letter-spacing: 0.05em;
-}
-
-.scoreboardTeams {
+.teamRow {
   display: flex;
   align-items: center;
   gap: 16px;
-  font-family: var(--font-heading);
 }
 
-.teamName {
-  font-size: 1.2rem;
+.teamNameStacked {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-primary);
 }
 
-.teamName.highlightLfc {
-  color: var(--accent);
+.teamNameStacked.highlightLfc {
   font-weight: 800;
 }
 
-.scoreDisplay {
+.teamScoreStacked {
+  font-family: monospace;
   font-size: 1.5rem;
   font-weight: 900;
-  background: var(--score-bg-gradient);
   color: var(--text-primary);
-  padding: 6px 16px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color-active);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  letter-spacing: 0.1em;
-  font-family: monospace;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  margin-left: auto; /* Push score to the right of the team column */
+  background: var(--score-bg-gradient);
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  min-width: 45px;
+  text-align: center;
 }
 
-.scoreDisplay:hover {
-  transform: scale(1.06);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-}
-
-.scoreboardRight {
+/* Right: Vertical countdown stack */
+.countdownColumn {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 12px;
+  min-width: 120px;
 }
 
-.scoreboardRightRow {
+.countdownItem {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.liveBadge {
+.countdownCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: monospace;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.countdownLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Non-countdown right panel (LIVE or FINISHED status) */
+.statusColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.liveBadgeLarge {
   background-color: var(--accent);
   color: var(--bg-app);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 800;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 14px;
+  border-radius: 20px;
   letter-spacing: 0.05em;
   animation: pulse 1.5s infinite;
 }
 
-.timeBadge {
+.finishedBadge {
   background-color: var(--border-color);
   color: var(--text-secondary);
   font-size: 0.75rem;
   font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
 }
 
-.scoreboardCountdownRow {
-  background-color: var(--kit-gold-glow);
-  border-top: 1px solid var(--border-color);
-  padding: 10px 24px;
+.matchTimeLabelLarge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* Crest wrapper */
+.crestWrapper {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.775rem;
-  font-weight: 600;
-  color: var(--kit-gold);
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.countdownIcon {
-  font-size: 0.95rem;
-  animation: tickPulse 1.5s infinite ease-in-out;
-}
-
-.countdownValue {
-  font-family: monospace;
-  font-size: 0.85rem;
-  letter-spacing: 0.05em;
-  color: var(--text-primary);
-  background-color: hsla(0, 0%, 100%, 0.06);
-  border: 1px solid var(--border-color);
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 4px;
-}
-
-@keyframes tickPulse {
-  0% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.8; }
-}
-
-@media (max-width: 576px) {
-  .scoreboardMain {
+/* Responsive adjustment */
+@media (max-width: 600px) {
+  .scoreboardBody {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 16px;
+    align-items: stretch;
   }
   
-  .scoreboardRight {
-    align-self: flex-end;
+  .countdownColumn {
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: unset;
+    border-top: 1px solid var(--border-color);
+    padding-top: 16px;
+    margin-top: 8px;
   }
   
-  .scoreboardCountdownRow {
-    padding: 10px 16px;
+  .countdownItem {
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+  }
+  
+  .statusColumn {
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 16px;
+    margin-top: 8px;
   }
 }
 

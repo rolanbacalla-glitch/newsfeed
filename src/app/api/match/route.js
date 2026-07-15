@@ -13,7 +13,8 @@ export async function GET() {
       awayScore: 1,
       status: "FINISHED",
       date: "2026-05-24T15:00:00Z", // Final match of Premier League 2025/26
-      competition: "Premier League"
+      competition: "Premier League",
+      venue: "Anfield"
     },
     {
       id: 2,
@@ -23,7 +24,8 @@ export async function GET() {
       awayScore: null,
       status: "SCHEDULED",
       date: "2026-07-25T22:00:00Z", // USA tour friendly
-      competition: "Men's First Team - Friendly"
+      competition: "Men's First Team - Friendly",
+      venue: "GEODIS Park"
     },
     {
       id: 3,
@@ -33,7 +35,8 @@ export async function GET() {
       awayScore: null,
       status: "SCHEDULED",
       date: "2026-07-29T23:30:00Z", // USA Tour
-      competition: "Men's First Team - USA Tour"
+      competition: "Men's First Team - USA Tour",
+      venue: "Lincoln Financial Field"
     },
     {
       id: 4,
@@ -43,7 +46,8 @@ export async function GET() {
       awayScore: null,
       status: "SCHEDULED",
       date: "2026-08-02T20:00:00Z", // USA Tour
-      competition: "Men's First Team - USA Tour"
+      competition: "Men's First Team - USA Tour",
+      venue: "MetLife Stadium"
     },
     {
       id: 5,
@@ -53,7 +57,8 @@ export async function GET() {
       awayScore: null,
       status: "SCHEDULED",
       date: "2026-08-09T13:30:00Z",
-      competition: "Men's First Team - Friendly"
+      competition: "Men's First Team - Friendly",
+      venue: "Anfield"
     },
     {
       id: 6,
@@ -63,7 +68,8 @@ export async function GET() {
       awayScore: null,
       status: "SCHEDULED",
       date: "2026-08-16T17:00:00Z",
-      competition: "Men's First Team - Friendly"
+      competition: "Men's First Team - Friendly",
+      venue: "Anfield"
     },
     {
       id: 7,
@@ -73,7 +79,8 @@ export async function GET() {
       awayScore: null,
       status: "SCHEDULED",
       date: "2026-08-23T15:30:00Z",
-      competition: "Premier League"
+      competition: "Premier League",
+      venue: "St James' Park"
     },
     {
       id: 8,
@@ -83,7 +90,8 @@ export async function GET() {
       awayScore: null,
       status: "SCHEDULED",
       date: "2026-08-29T11:30:00Z",
-      competition: "Premier League"
+      competition: "Premier League",
+      venue: "Anfield"
     }
   ];
 
@@ -162,7 +170,8 @@ export async function GET() {
     isHome: matchToDisplay.homeTeam === "Liverpool",
     competition: matchToDisplay.competition,
     formattedDate: displayDate.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }),
-    kickoffISO: matchToDisplay.date
+    kickoffISO: matchToDisplay.date,
+    venue: matchToDisplay.venue || "Anfield"
   };
 
   return new Response(JSON.stringify(result), {
