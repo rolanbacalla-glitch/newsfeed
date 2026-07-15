@@ -257,11 +257,12 @@
 }
 
 .scoreboardContainer {
-  background-color: var(--bg-card);
+  background: var(--scoreboard-bg-gradient);
   border: 1px solid var(--border-color);
+  border-top: 3px solid var(--accent);
   border-radius: 12px;
   margin-bottom: 28px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
   overflow: hidden;

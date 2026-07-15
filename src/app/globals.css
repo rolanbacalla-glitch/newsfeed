@@ -18,6 +18,7 @@
   --kit-gold: hsl(0, 0%, 24%);
   --kit-gold-glow: hsla(0, 0%, 0%, 0.05);
   --score-bg-gradient: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(0, 0%, 88%) 100%);
+  --scoreboard-bg-gradient: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(0, 0%, 93%) 100%);
   
   /* Monochrome Category Badges (Light) */
   --badge-transfer: hsl(0, 0%, 24%);
@@ -60,6 +61,7 @@
   --kit-gold: hsl(0, 0%, 85%);
   --kit-gold-glow: hsla(0, 0%, 100%, 0.06);
   --score-bg-gradient: linear-gradient(135deg, hsl(0, 0%, 18%) 0%, hsl(0, 0%, 8%) 100%);
+  --scoreboard-bg-gradient: linear-gradient(135deg, hsl(0, 0%, 13%) 0%, hsl(0, 0%, 6%) 100%);
 
   --badge-transfer: hsl(0, 0%, 85%);
   --badge-transfer-bg: hsla(0, 0%, 100%, 0.06);
