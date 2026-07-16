@@ -216,6 +216,25 @@
 }
 
 @media (max-width: 600px) {
+  .card {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .cardHeader {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .sourceFooter {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .headline {
+    font-size: 1rem;
+  }
+
   .secondaryLink {
     grid-template-columns: 1fr;
     gap: 4px;

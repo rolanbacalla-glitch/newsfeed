@@ -141,6 +141,11 @@ a {
   display: flex;
   min-height: 100vh;
   position: relative;
+  overflow-x: hidden;
+}
+
+.app-container > * {
+  min-width: 0;
 }
 
 /* Base Badge Style */
@@ -174,6 +179,11 @@ a {
 
 @media (max-width: 768px) {
   :root {
-    --sidebar-width: 0px;
+    --sidebar-width: 100%;
+    --header-height: auto;
+  }
+
+  .app-container {
+    flex-direction: column;
   }
 }

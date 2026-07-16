@@ -17,6 +17,11 @@ export const metadata = {
   keywords: ["Liverpool FC", "LFC News", "News Aggregator", "Ground News Clone", "RedLine Clone"],
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`dark-theme ${lfcSerif.variable} ${lfcSans.variable}`}>

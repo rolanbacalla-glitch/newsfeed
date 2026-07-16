@@ -2,10 +2,11 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   overflow: hidden;
   position: relative;
   background-color: var(--bg-app);
+  min-width: 0; /* prevent flex blowout */
 }
 
 .topBar {
@@ -15,15 +16,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   background-color: var(--bg-sidebar);
   position: sticky;
   top: 0;
   z-index: 90;
+  flex-shrink: 0;
 }
 
 .searchWrapper {
   position: relative;
-  width: 400px;
+  flex: 1;
+  max-width: 400px;
+  min-width: 0;
 }
 
 .searchIcon {
@@ -33,6 +38,7 @@
   transform: translateY(-50%);
   font-size: 0.9rem;
   color: var(--text-muted);
+  pointer-events: none;
 }
 
 .searchInput {
@@ -57,6 +63,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .refreshMeta {
@@ -121,6 +128,7 @@
   background-color: #10b981;
   border-radius: 50%;
   animation: pulse 1.5s infinite;
+  flex-shrink: 0;
 }
 
 .statsText {
@@ -144,6 +152,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .feedTitle {
@@ -162,6 +172,7 @@
 .activeFiltersRow {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
   margin-top: 8px;
 }
 
@@ -242,31 +253,6 @@
   100% { transform: scale(0.9); opacity: 0.5; }
 }
 
-@media (max-width: 768px) {
-  .topBar {
-    padding: 0 16px;
-    flex-direction: column;
-    height: auto;
-    gap: 12px;
-    padding-bottom: 12px;
-    padding-top: 12px;
-  }
-  
-  .searchWrapper {
-    width: 100%;
-  }
-  
-  .feedScrollContainer {
-    padding: 16px;
-  }
-  
-  .feedHeader {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-}
-
 .skeletonList {
   display: flex;
   flex-direction: column;
@@ -312,6 +298,7 @@
   margin-bottom: 8px;
 }
 
+/* ─── Scoreboard ─────────────────────────────────── */
 .scoreboardContainer {
   background: var(--scoreboard-bg-gradient);
   border: 1px solid var(--border-color);
@@ -329,8 +316,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
-  padding: 14px 24px;
+  gap: 12px;
+  padding: 12px 20px;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -375,19 +362,24 @@
   flex-direction: column;
   gap: 16px;
   flex-grow: 1;
+  min-width: 0;
 }
 
 .teamRow {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .teamNameStacked {
   font-family: var(--font-heading);
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--text-primary);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .teamNameStacked.highlightLfc {
@@ -399,13 +391,14 @@
   font-size: 1.5rem;
   font-weight: 900;
   color: var(--text-primary);
-  margin-left: auto; /* Push score to the right of the team column */
+  margin-left: auto;
   background: var(--score-bg-gradient);
   padding: 4px 12px;
   border-radius: 6px;
   border: 1px solid var(--border-color);
   min-width: 45px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 /* Right: Vertical countdown stack */
@@ -413,7 +406,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  min-width: 120px;
+  min-width: 110px;
+  flex-shrink: 0;
 }
 
 .countdownItem {
@@ -423,8 +417,8 @@
 }
 
 .countdownCircle {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: var(--bg-sidebar);
   border: 1px solid var(--border-color);
@@ -432,10 +426,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 800;
   font-family: monospace;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  flex-shrink: 0;
 }
 
 .countdownLabel {
@@ -452,6 +447,7 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .liveBadgeLarge {
@@ -489,33 +485,147 @@
   flex-shrink: 0;
 }
 
-/* Responsive adjustment */
+/* ─── Tablet Responsive (≤900px) ─────────────────── */
+@media (max-width: 900px) {
+  .topBar {
+    padding: 0 20px;
+  }
+
+  .feedScrollContainer {
+    padding: 24px 20px;
+  }
+
+  /* Hide the stats text detail, keep dot + refresh btn */
+  .statsText {
+    display: none;
+  }
+
+  .refreshMeta {
+    display: none;
+  }
+}
+
+/* ─── Mobile Responsive (≤768px) ─────────────────── */
+@media (max-width: 768px) {
+  .mainContent {
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+  }
+
+  .topBar {
+    padding: 10px 16px;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+  }
+
+  .searchWrapper {
+    max-width: 100%;
+    flex: 1 1 200px;
+  }
+
+  .statsIndicator {
+    gap: 8px;
+  }
+
+  .feedScrollContainer {
+    padding: 16px;
+    overflow-y: visible;
+  }
+
+  .feedHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .feedTitle {
+    font-size: 1.35rem;
+  }
+
+  .feedSubtitle {
+    font-size: 0.8rem;
+  }
+
+  .timeDivider {
+    margin: 20px 0 12px 0;
+  }
+
+  /* Scoreboard adjustments */
+  .scoreboardHeader {
+    padding: 10px 16px;
+    gap: 8px;
+  }
+
+  .headerDetail {
+    font-size: 0.7rem;
+  }
+
+  .scoreboardBody {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .teamNameStacked {
+    font-size: 1.1rem;
+  }
+
+  .teamScoreStacked {
+    font-size: 1.2rem;
+    min-width: 38px;
+    padding: 3px 8px;
+  }
+}
+
+/* ─── Small Mobile (≤600px) ──────────────────────── */
 @media (max-width: 600px) {
   .scoreboardBody {
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
   }
-  
+
   .countdownColumn {
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     min-width: unset;
     border-top: 1px solid var(--border-color);
     padding-top: 16px;
-    margin-top: 8px;
   }
-  
+
   .countdownItem {
     flex-direction: column;
     gap: 4px;
     align-items: center;
   }
-  
+
   .statusColumn {
     align-items: center;
     border-top: 1px solid var(--border-color);
     padding-top: 16px;
-    margin-top: 8px;
+  }
+
+  .teamNameStacked {
+    font-size: 1rem;
+  }
+
+  .topBar {
+    gap: 8px;
+  }
+
+  .feedScrollContainer {
+    padding: 12px;
+  }
+
+  .feedTitle {
+    font-size: 1.2rem;
+  }
+
+  .skeletonCard {
+    height: 110px;
   }
 }
-

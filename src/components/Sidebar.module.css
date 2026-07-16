@@ -10,7 +10,8 @@
   top: 0;
   overflow-y: auto;
   z-index: 100;
-  transition: all 0.3s ease;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
 }
 
 .logoContainer {
@@ -83,6 +84,7 @@
   font-weight: 500;
   text-align: left;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .navButton:hover {
@@ -119,6 +121,7 @@
   cursor: pointer;
   font-family: var(--font-sans);
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .categoryPill:hover {
@@ -160,6 +163,7 @@
   font-size: 0.85rem;
   font-weight: 600;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .themeToggle:hover {
@@ -179,12 +183,92 @@
   letter-spacing: 0.05em;
 }
 
+/* ─── Mobile Responsive (≤768px) ─────────────────────────────── */
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;
     height: auto;
-    position: relative;
+    position: sticky;
+    top: 0;
+    flex-direction: column;
+    padding: 12px 16px;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
+    overflow-y: visible;
+    overflow-x: hidden;
+  }
+
+  .logoContainer {
+    margin-bottom: 12px;
+  }
+
+  .logoIcon {
+    font-size: 1.2rem;
+  }
+
+  .logoText {
+    font-size: 1.05rem;
+  }
+
+  /* Show nav groups stacked, or scrollable horizontally */
+  .navGroup {
+    margin-bottom: 12px;
+  }
+
+  .navHeading {
+    margin-bottom: 8px;
+    font-size: 0.65rem;
+  }
+
+  /* Topics: horizontal pill row */
+  .navList {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .navButton {
+    width: auto;
+    padding: 7px 12px;
+    font-size: 0.78rem;
+    gap: 6px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+  }
+
+  .navButton.active {
+    background-color: var(--accent-glow);
+    border-color: var(--border-color-active);
+  }
+
+  /* Categories already wrap */
+  .categoryGrid {
+    gap: 6px;
+  }
+
+  .categoryPill {
+    padding: 5px 10px;
+    font-size: 0.7rem;
+  }
+
+  /* Footer: horizontal compact bar */
+  .footer {
+    flex-direction: row;
+    align-items: center;
+    padding-top: 12px;
+    margin-top: 4px;
+    gap: 10px;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .themeToggle {
+    width: auto;
+    padding: 7px 12px;
+    font-size: 0.78rem;
+  }
+
+  .footerCredits {
+    display: none;
   }
 }
