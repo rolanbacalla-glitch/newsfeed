@@ -5,222 +5,67 @@ import Sidebar from "../components/Sidebar";
 import StoryCard from "../components/StoryCard";
 import styles from "./page.module.css";
 
-// ─── Team colour palette ──────────────────────────────────────────────────────
-const TEAM_COLOURS = {
-  liverpool:    { primary: "#C8102E", secondary: "#F6EB61", glow: "rgba(200,16,46,0.55)" },
-  sunderland:   { primary: "#EB172B", secondary: "#000000", glow: "rgba(235,23,43,0.45)" },
-  wrexham:      { primary: "#DC143C", secondary: "#ffffff", glow: "rgba(220,20,60,0.45)" },
-  arsenal:      { primary: "#EF0107", secondary: "#ffffff", glow: "rgba(239,1,7,0.45)" },
-  leeds:        { primary: "#FFCD00", secondary: "#1D428A", glow: "rgba(255,205,0,0.5)"  },
-  monaco:       { primary: "#CE1126", secondary: "#ffffff", glow: "rgba(206,17,38,0.45)" },
-  como:         { primary: "#003399", secondary: "#ffffff", glow: "rgba(0,51,153,0.45)"  },
-  newcastle:    { primary: "#241F20", secondary: "#ffffff", glow: "rgba(255,255,255,0.25)" },
-  nottingham:   { primary: "#DD0000", secondary: "#ffffff", glow: "rgba(221,0,0,0.45)"   },
-  forest:       { primary: "#DD0000", secondary: "#ffffff", glow: "rgba(221,0,0,0.45)"   },
-  default:      { primary: "#6b7280", secondary: "#ffffff", glow: "rgba(107,114,128,0.3)" },
+// ─── Team data: real crest URLs + theme-aware name colours ────────────────────
+// Crest images: football-data.org public CDN (free, no auth needed).
+// darkText  = vivid shade for dark backgrounds
+// lightText = deep/muted shade for light backgrounds
+const TEAM_DATA = {
+  liverpool:  { crest: "https://crests.football-data.org/64.png",   darkText: "#FF4D6A", lightText: "#A00D24", glow: "rgba(200,16,46,0.5)"    },
+  sunderland: { crest: "https://crests.football-data.org/394.png",  darkText: "#FF5566", lightText: "#9A000E", glow: "rgba(235,23,43,0.45)"   },
+  wrexham:    { crest: "https://crests.football-data.org/8650.png", darkText: "#FF6B80", lightText: "#9B0000", glow: "rgba(220,20,60,0.4)"    },
+  arsenal:    { crest: "https://crests.football-data.org/57.png",   darkText: "#FF5055", lightText: "#9A0005", glow: "rgba(239,1,7,0.45)"     },
+  leeds:      { crest: "https://crests.football-data.org/341.png",  darkText: "#FFD700", lightText: "#1D428A", glow: "rgba(255,205,0,0.5)"    },
+  monaco:     { crest: "https://crests.football-data.org/1903.png", darkText: "#FF5566", lightText: "#8B000C", glow: "rgba(206,17,38,0.45)"   },
+  como:       { crest: "https://crests.football-data.org/5890.png", darkText: "#6699FF", lightText: "#001A66", glow: "rgba(0,51,153,0.45)"    },
+  newcastle:  { crest: "https://crests.football-data.org/67.png",   darkText: "#E0E0E0", lightText: "#241F20", glow: "rgba(200,200,200,0.3)"  },
+  nottingham: { crest: "https://crests.football-data.org/351.png",  darkText: "#FF5555", lightText: "#880000", glow: "rgba(221,0,0,0.45)"     },
+  forest:     { crest: "https://crests.football-data.org/351.png",  darkText: "#FF5555", lightText: "#880000", glow: "rgba(221,0,0,0.45)"     },
+  default:    { crest: null,                                         darkText: "#9CA3AF", lightText: "#374151", glow: "rgba(107,114,128,0.3)"  },
 };
 
-function getTeamColours(teamName) {
+function getTeamData(teamName) {
   const n = (teamName || "").toLowerCase();
-  for (const [key, val] of Object.entries(TEAM_COLOURS)) {
+  for (const [key, val] of Object.entries(TEAM_DATA)) {
     if (key !== "default" && n.includes(key)) return val;
   }
-  return TEAM_COLOURS.default;
+  return TEAM_DATA.default;
 }
 
+function getTeamNameColor(data, isDark) {
+  return isDark ? data.darkText : data.lightText;
+}
+
+// ─── TeamCrest: real badge image with coloured glow ───────────────────────────
 const TeamCrest = ({ teamName }) => {
-  const name = (teamName || "").toLowerCase();
-  const colours = getTeamColours(teamName);
+  const data = getTeamData(teamName);
+  const [imgError, setImgError] = React.useState(false);
 
-  // ── Liverpool ──
-  if (name.includes("liverpool")) {
+  if (data.crest && !imgError) {
     return (
-      <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 6px ${colours.glow})` }}>
-        <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="lfc-shield" x1="7" y1="2.5" x2="25" y2="30" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#C8102E" />
-              <stop offset="100%" stopColor="#8B0A1A" />
-            </linearGradient>
-          </defs>
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="url(#lfc-shield)" />
-          <path d="M16 3.5C11 3.5 8 6.5 8 11.5c0 7 5 14 8 16.5 3-2.5 8-9.5 8-16.5 0-5-3-8-8-8z" fill="#fff" opacity="0.1" />
-          {/* Liverbird silhouette */}
-          <path d="M16 8.5c-.3 0-.6.1-.7.4-.2.4-.2.8-.1 1.2l.3.8-.5.4c-.4.3-.5.7-.3 1.1.2.4.6.6 1 .5l.7-.1.2.6c.1.4.5.7.9.6.4-.1.6-.5.5-.9l-.2-.8.5-.3c.4-.3.5-.7.3-1.1-.1-.3-.4-.5-.7-.6l-.7.1-.2-.6c-.1-.4-.5-.7-.9-.6z" fill="#F6EB61" />
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#F6EB61" strokeWidth="1" opacity="0.6" />
-        </svg>
+      <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 6px ${data.glow})` }}>
+        <img
+          src={data.crest}
+          alt={`${teamName} crest`}
+          width={38}
+          height={38}
+          style={{ objectFit: "contain", display: "block" }}
+          onError={() => setImgError(true)}
+        />
       </div>
     );
   }
 
-  // ── Sunderland ──
-  if (name.includes("sunderland")) {
-    return (
-      <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 6px ${colours.glow})` }}>
-        <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="sun-shield" x1="7" y1="2.5" x2="25" y2="30" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#EB172B" />
-              <stop offset="100%" stopColor="#9A0E1A" />
-            </linearGradient>
-          </defs>
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="url(#sun-shield)" />
-          {/* Black & White vertical stripes clipped */}
-          <path d="M11 6v14M16 4.5v17.5M21 6v14" stroke="#000000" strokeWidth="2.5" opacity="0.5" />
-          <path d="M9.5 6v14M14.5 4.5v17.5M19.5 6v14" stroke="#ffffff" strokeWidth="1" opacity="0.35" />
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#ffffff" strokeWidth="1" opacity="0.5" />
-        </svg>
-      </div>
-    );
-  }
-
-  // ── Wrexham ──
-  if (name.includes("wrexham")) {
-    return (
-      <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 6px ${colours.glow})` }}>
-        <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="wrx-shield" x1="7" y1="2.5" x2="25" y2="30" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#DC143C" />
-              <stop offset="100%" stopColor="#8B0000" />
-            </linearGradient>
-          </defs>
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="url(#wrx-shield)" />
-          <circle cx="16" cy="16.5" r="5" fill="#000000" opacity="0.4" />
-          <circle cx="16" cy="16.5" r="3" fill="#ffffff" opacity="0.8" />
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#ffffff" strokeWidth="1" opacity="0.5" />
-        </svg>
-      </div>
-    );
-  }
-
-  // ── Arsenal ──
-  if (name.includes("arsenal")) {
-    return (
-      <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 6px ${colours.glow})` }}>
-        <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="afc-shield" x1="7" y1="2.5" x2="25" y2="30" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#EF0107" />
-              <stop offset="100%" stopColor="#9A0005" />
-            </linearGradient>
-          </defs>
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="url(#afc-shield)" />
-          {/* Cannon */}
-          <path d="M10 16.5h12M21 14.5v4" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-          <ellipse cx="16" cy="16.5" rx="3" ry="2.5" stroke="#ffffff" strokeWidth="1" fill="none" opacity="0.7" />
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#ffffff" strokeWidth="1" opacity="0.4" />
-        </svg>
-      </div>
-    );
-  }
-
-  // ── Leeds ──
-  if (name.includes("leeds")) {
-    return (
-      <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 6px ${colours.glow})` }}>
-        <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="lufc-shield" x1="7" y1="2.5" x2="25" y2="30" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#FFCD00" />
-              <stop offset="100%" stopColor="#C9A200" />
-            </linearGradient>
-          </defs>
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="url(#lufc-shield)" />
-          <path d="M12 12h8M12 16h8M12 20h8" stroke="#1D428A" strokeWidth="1.5" strokeLinecap="round" />
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#1D428A" strokeWidth="1.5" />
-        </svg>
-      </div>
-    );
-  }
-
-  // ── Monaco ──
-  if (name.includes("monaco")) {
-    return (
-      <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 6px ${colours.glow})` }}>
-        <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="asm-top" x1="7" y1="2.5" x2="25" y2="16" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#CE1126" />
-              <stop offset="100%" stopColor="#8B000C" />
-            </linearGradient>
-          </defs>
-          {/* Top half red */}
-          <path d="M7 11c0-5.5 3-8.5 9-8.5s9 3 9 8.5v3H7v-3z" fill="url(#asm-top)" />
-          {/* Bottom half white */}
-          <path d="M7 14h18c0 8-6 15.5-9 15.5S7 22 7 14z" fill="#ffffff" />
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#CE1126" strokeWidth="1" opacity="0.5" />
-        </svg>
-      </div>
-    );
-  }
-
-  // ── Como ──
-  if (name.includes("como")) {
-    return (
-      <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 6px ${colours.glow})` }}>
-        <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="como-shield" x1="7" y1="2.5" x2="25" y2="30" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#003399" />
-              <stop offset="100%" stopColor="#001A66" />
-            </linearGradient>
-          </defs>
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="url(#como-shield)" />
-          <path d="M12 10h8M12 15h8M12 20h8" stroke="#ffffff" strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#4477CC" strokeWidth="1" />
-        </svg>
-      </div>
-    );
-  }
-
-  // ── Newcastle ──
-  if (name.includes("newcastle")) {
-    return (
-      <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 6px ${colours.glow})` }}>
-        <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          {/* Left half black, right half white */}
-          <clipPath id="nufc-clip">
-            <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" />
-          </clipPath>
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="#ffffff" />
-          <rect x="7" y="2.5" width="9" height="28" fill="#241F20" clipPath="url(#nufc-clip)" />
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#888" strokeWidth="1" />
-        </svg>
-      </div>
-    );
-  }
-
-  // ── Nottingham Forest ──
-  if (name.includes("nottingham") || name.includes("forest")) {
-    return (
-      <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 6px ${colours.glow})` }}>
-        <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="nffc-shield" x1="7" y1="2.5" x2="25" y2="30" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#DD0000" />
-              <stop offset="100%" stopColor="#880000" />
-            </linearGradient>
-          </defs>
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="url(#nffc-shield)" />
-          {/* Tree */}
-          <path d="M16 8l-4.5 5.5H14v5.5h4V13.5h2.5L16 8z" fill="#ffffff" />
-          <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#ffffff" strokeWidth="1" opacity="0.4" />
-        </svg>
-      </div>
-    );
-  }
-
-  // ── Default ──
+  // Fallback: generic shield
   return (
-    <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 4px ${colours.glow})` }}>
-      <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 4px ${data.glow})` }}>
+      <svg width="38" height="38" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="#374151" />
         <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#9CA3AF" strokeWidth="1.5" />
       </svg>
     </div>
   );
 };
+
 
 const formatKickoffDate = (isoString) => {
   if (!isoString) return "";
@@ -587,7 +432,10 @@ export default function Home() {
                 <div className={styles.teamsStackedList}>
                   <div className={styles.teamRow}>
                     <TeamCrest teamName={match.homeTeam} />
-                    <span className={`${styles.teamNameStacked} ${match.homeTeam === "Liverpool" ? styles.highlightLfc : ""}`}>
+                    <span
+                      className={styles.teamNameStacked}
+                      style={{ color: getTeamNameColor(getTeamData(match.homeTeam), theme === "dark") }}
+                    >
                       {match.homeTeam}
                     </span>
                     {(match.status === "LIVE" || match.status === "FINISHED") && (
@@ -596,7 +444,10 @@ export default function Home() {
                   </div>
                   <div className={styles.teamRow}>
                     <TeamCrest teamName={match.awayTeam} />
-                    <span className={`${styles.teamNameStacked} ${match.awayTeam === "Liverpool" ? styles.highlightLfc : ""}`}>
+                    <span
+                      className={styles.teamNameStacked}
+                      style={{ color: getTeamNameColor(getTeamData(match.awayTeam), theme === "dark") }}
+                    >
                       {match.awayTeam}
                     </span>
                     {(match.status === "LIVE" || match.status === "FINISHED") && (
