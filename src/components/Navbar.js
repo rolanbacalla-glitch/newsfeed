@@ -245,8 +245,8 @@ export default function Navbar({
             </nav>
           </div>
 
-          {/* Category Filter Pills (Bottom Right) */}
-          <div className="flex items-center overflow-x-auto no-scrollbar self-start sm:self-end w-full sm:w-auto" style={{ gap: "0.75rem" }}>
+          {/* Category Filter Pills (Bottom Left) */}
+          <div className="flex items-center overflow-x-auto no-scrollbar" style={{ gap: "0.75rem" }}>
             <span
               className="shrink-0"
               style={{
