@@ -12,10 +12,60 @@ export default function Sidebar({
   setTheme
 }) {
   const topics = [
-    { id: "all", name: "All Topics", icon: "🌐" },
-    { id: "Liverpool FC", name: "Liverpool FC", icon: "🔴" },
-    { id: "Premier League", name: "Premier League", icon: "🦁" },
-    { id: "Champions League", name: "Champions League", icon: "⭐️" }
+    {
+      id: "all",
+      name: "All Topics",
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={styles.navIconSvg}
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+          <path d="M2 12h20" />
+        </svg>
+      )
+    },
+    {
+      id: "Liverpool FC",
+      name: "Liverpool FC",
+      icon: (
+        <img
+          src="https://crests.football-data.org/64.png"
+          alt="Liverpool FC"
+          className={styles.topicLogo}
+        />
+      )
+    },
+    {
+      id: "Premier League",
+      name: "Premier League",
+      icon: (
+        <img
+          src="https://crests.football-data.org/PL.png"
+          alt="Premier League"
+          className={styles.topicLogo}
+          style={theme === "dark" ? { filter: "invert(1) brightness(1.5)" } : undefined}
+        />
+      )
+    },
+    {
+      id: "Champions League",
+      name: "Champions League",
+      icon: (
+        <img
+          src="https://crests.football-data.org/CL.png"
+          alt="Champions League"
+          className={styles.topicLogo}
+          style={theme === "dark" ? { filter: "invert(1) brightness(1.5)" } : undefined}
+        />
+      )
+    }
   ];
 
   const categories = [
@@ -36,7 +86,13 @@ export default function Sidebar({
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logoContainer}>
-        <span className={styles.logoIcon}>🔴</span>
+        <span className={styles.logoIcon}>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Liver_bird.svg"
+            alt="Redline Logo"
+            className={styles.logoIconImage}
+          />
+        </span>
         <h1 className={styles.logoText}>
           RED<span>LINE</span>
         </h1>
@@ -83,7 +139,7 @@ export default function Sidebar({
         <button className={styles.themeToggle} onClick={toggleTheme}>
           <span className={styles.themeIcon}>{theme === "dark" ? "☀️" : "🌙"}</span>
           <span className={styles.themeLabel}>
-            {theme === "dark" ? "Parchment Light" : "Slate Dark"}
+            {theme === "dark" ? "Light Mode" : "Dark Mode"}
           </span>
         </button>
         <p className={styles.footerCredits}>YOU'LL NEVER WALK ALONE</p>
