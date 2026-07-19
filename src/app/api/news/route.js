@@ -30,6 +30,38 @@ const STOP_WORDS = new Set([
 
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 
+// ─── Utility: decode HTML / XML entities ──────────────────────────────────────
+function decodeHtmlEntities(str) {
+  if (!str) return "";
+  return str
+    .replace(/&#(\d+);/g, (match, dec) => {
+      try {
+        return String.fromCodePoint(parseInt(dec, 10));
+      } catch {
+        return match;
+      }
+    })
+    .replace(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
+      try {
+        return String.fromCodePoint(parseInt(hex, 16));
+      } catch {
+        return match;
+      }
+    })
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&lsquo;/g, '‘')
+    .replace(/&rsquo;/g, '’')
+    .replace(/&ldquo;/g, '“')
+    .replace(/&rdquo;/g, '”')
+    .replace(/&ndash;/g, '–')
+    .replace(/&mdash;/g, '—');
+}
+
 // ─── Utility: clean description/summary text ─────────────────────────────────
 function cleanSummary(html, primaryHeadline) {
   if (!html) return "";
@@ -109,13 +141,18 @@ async function fetchFeed(feedUrl, sourceName, parser) {
 
     const normalised = (Array.isArray(items) ? items : [items])
       .filter(Boolean)
-      .map((item) => ({
-        title:        (item.title?.["#text"] ?? item.title ?? "").toString().trim(),
-        source:       sourceName,
-        url:          item.link?.["@_href"] ?? item.link ?? item.guid ?? "",
-        published_at: item.pubDate ?? item.updated ?? item.published ?? new Date().toISOString(),
-        description:  (item.description ?? item.summary?.["#text"] ?? item.summary ?? item.content?.["#text"] ?? item.content ?? "").toString(),
-      }))
+      .map((item) => {
+        const rawTitle = (item.title?.["#text"] ?? item.title ?? "").toString().trim();
+        const rawDesc = (item.description ?? item.summary?.["#text"] ?? item.summary ?? item.content?.["#text"] ?? item.content ?? "").toString();
+
+        return {
+          title:        decodeHtmlEntities(rawTitle),
+          source:       sourceName,
+          url:          item.link?.["@_href"] ?? item.link ?? item.guid ?? "",
+          published_at: item.pubDate ?? item.updated ?? item.published ?? new Date().toISOString(),
+          description:  decodeHtmlEntities(rawDesc),
+        };
+      })
       .filter((a) => a.title); // drop items with no title
 
     return normalised;
