@@ -105,7 +105,7 @@ export default function Navbar({
   return (
     <header className="w-full bg-bg-sidebar border-b border-border-color sticky top-0 z-50 transition-colors duration-300">
       {/* Upper row: Brand, Search, Control desk */}
-      <div className="container-bounded h-16 flex items-center justify-between gap-4">
+      <div className="container-bounded flex items-center justify-between gap-4" style={{ height: "72px" }}>
         
         {/* Brand Logo */}
         <div className="flex items-center gap-2.5 shrink-0 group select-none">
@@ -188,27 +188,56 @@ export default function Navbar({
 
       {/* Lower row: Topics tabs (Left) & Category pills (Right) */}
       <div className="border-t border-border-color bg-bg-sidebar/80 backdrop-blur-md">
-        <div className="container-bounded flex flex-col lg:flex-row lg:items-center justify-between py-2 gap-3">
-          
+        <div
+          className="container-bounded flex flex-col lg:flex-row lg:items-center justify-between gap-3"
+          style={{ paddingTop: "0.625rem", paddingBottom: "0.625rem" }}
+        >
+
           {/* Topics Navigation (Left) */}
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-            <span className="text-[10px] uppercase tracking-wider font-extrabold text-text-muted shrink-0 hidden sm:inline mr-1">
+          <div className="flex items-center overflow-x-auto no-scrollbar" style={{ gap: "0.75rem" }}>
+            <span
+              className="shrink-0 hidden sm:inline"
+              style={{
+                fontSize: "11px",
+                fontWeight: 800,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--accent)",
+                opacity: 0.7,
+                marginRight: "0.25rem",
+              }}
+            >
               Topics
             </span>
-            <nav className="flex items-center gap-2">
+            {/* vertical rule */}
+            <span
+              className="hidden sm:block shrink-0"
+              style={{ width: "1px", height: "20px", background: "var(--border-color)", marginRight: "0.25rem" }}
+            />
+            <nav className="flex items-center" style={{ gap: "0.5rem" }}>
               {topics.map((topic) => {
                 const isActive = activeTopic === topic.id;
                 return (
                   <button
                     key={topic.id}
                     onClick={() => setActiveTopic(topic.id)}
-                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl border text-xs font-semibold transition-all duration-200 cursor-pointer whitespace-nowrap ${
-                      isActive
-                        ? "bg-accent-glow text-accent border-border-active font-bold"
-                        : "bg-bg-app/40 text-text-secondary border-transparent hover:bg-bg-card hover:text-text-primary hover:border-border-color"
-                    }`}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.375rem",
+                      padding: "0.4rem 0.875rem",
+                      borderRadius: "0.625rem",
+                      fontSize: "13px",
+                      fontWeight: isActive ? 700 : 600,
+                      whiteSpace: "nowrap",
+                      cursor: "pointer",
+                      transition: "all 0.18s ease",
+                      border: `1px solid ${isActive ? "var(--border-active)" : "transparent"}`,
+                      background: isActive ? "var(--accent-glow)" : "transparent",
+                      color: isActive ? "var(--accent)" : "var(--text-secondary)",
+                    }}
                   >
-                    <span className="shrink-0">{topic.icon}</span>
+                    <span style={{ fontSize: "15px", lineHeight: 1 }}>{topic.icon}</span>
                     <span>{topic.name}</span>
                   </button>
                 );
@@ -216,23 +245,52 @@ export default function Navbar({
             </nav>
           </div>
 
+          {/* Divider — hidden on small screens */}
+          <span
+            className="hidden lg:block shrink-0"
+            style={{ width: "1px", height: "28px", background: "var(--border-color)", opacity: 0.6 }}
+          />
+
           {/* Category Filter Pills (Right) */}
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar lg:justify-end">
-            <span className="text-[10px] uppercase tracking-wider font-extrabold text-text-muted shrink-0 mr-1">
+          <div className="flex items-center overflow-x-auto no-scrollbar" style={{ gap: "0.625rem" }}>
+            <span
+              className="shrink-0"
+              style={{
+                fontSize: "11px",
+                fontWeight: 800,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--accent)",
+                opacity: 0.7,
+                marginRight: "0.25rem",
+              }}
+            >
               Filters
             </span>
-            <div className="flex items-center gap-2">
+            <span
+              className="shrink-0"
+              style={{ width: "1px", height: "20px", background: "var(--border-color)", marginRight: "0.25rem" }}
+            />
+            <div className="flex items-center" style={{ gap: "0.5rem" }}>
               {categories.map((cat) => {
                 const isActive = activeCategory === cat;
                 return (
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-3.5 py-1.5 rounded-xl border text-xs font-semibold transition-all duration-200 cursor-pointer whitespace-nowrap ${
-                      isActive
-                        ? "bg-text-primary text-bg-app border-text-primary font-bold shadow-sm"
-                        : "bg-bg-app/40 hover:bg-bg-card text-text-secondary border-transparent hover:border-border-color"
-                    }`}
+                    style={{
+                      padding: "0.4rem 0.875rem",
+                      borderRadius: "0.625rem",
+                      fontSize: "13px",
+                      fontWeight: isActive ? 700 : 600,
+                      whiteSpace: "nowrap",
+                      cursor: "pointer",
+                      transition: "all 0.18s ease",
+                      border: `1px solid ${isActive ? "var(--text-primary)" : "transparent"}`,
+                      background: isActive ? "var(--text-primary)" : "transparent",
+                      color: isActive ? "var(--bg-app)" : "var(--text-secondary)",
+                      boxShadow: isActive ? "0 1px 4px rgba(0,0,0,0.18)" : "none",
+                    }}
                   >
                     {cat}
                   </button>
