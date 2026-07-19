@@ -383,13 +383,21 @@ export default function Home() {
             >
               
               {/* Competition Label */}
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex flex-wrap items-center gap-3 shrink-0 justify-center md:justify-start">
                 <span className="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/10">
                   {match.competition}
                 </span>
                 <span className="text-[10px] text-red-100 dark:text-red-300 font-bold uppercase tracking-wider">
                   {formatKickoffDate(match.kickoffISO)}
                 </span>
+                {match.venue && (
+                  <span className="text-[10px] text-white/80 font-bold uppercase tracking-wider flex items-center gap-1">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" opacity="0.8">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                    {match.venue}
+                  </span>
+                )}
               </div>
 
               {/* Teams & Scoreboard horizontal ticker */}
