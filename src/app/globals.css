@@ -1,3 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-app: var(--bg-app);
+  --color-bg-sidebar: var(--bg-sidebar);
+  --color-bg-card: var(--bg-card);
+  --color-bg-card-hover: var(--bg-card-hover);
+  --color-border-color: var(--border-color);
+  --color-border-active: var(--border-color-active);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-glow: var(--accent-glow);
+  --color-accent-hover: var(--accent-hover);
+}
+
 :root {
   /* Premium Monochrome Theme (Default Light) */
   --bg-app: hsl(0, 0%, 97%);
@@ -139,13 +156,152 @@ a {
 /* Page Layout Wrappers */
 .app-container {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
 }
 
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .app-container > * {
   min-width: 0;
+}
+
+/* ─── Layout containers ──────────────────────────────────────────────────────
+   These replace Tailwind's max-w-7xl mx-auto which Turbopack doesn't compile.
+   max-w-7xl = 80rem = 1280px                                                 */
+.container-bounded {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;   /* 16px — mobile */
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-bounded {
+    padding-left: 1.5rem;  /* 24px — sm */
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-bounded {
+    padding-left: 2rem;  /* 32px — lg */
+    padding-right: 2rem;
+  }
+}
+
+
+/* ─── Feed grid ──────────────────────────────────────────────────────────────*/
+.feed-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;             /* 24px — MD3 card grid spacing */
+}
+
+@media (min-width: 768px) {
+  .feed-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .feed-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ─── Card layout spacing ────────────────────────────────────────────────────
+   Hardcoded because Tailwind utility classes from JSX are not compiled by
+   Turbopack in this setup. All spacing follows an 8pt grid.                  */
+
+/* Standard grid card — MD3: 24px padding, 16px body gap */
+.card-standard {
+  padding: 1.5rem;         /* 24px — MD3 card content area */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-standard .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;               /* 16px — MD3 between related elements */
+}
+
+.card-standard .card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.25rem;     /* 20px — MD3 spacing between body and footer */
+}
+
+.card-standard .card-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 1rem;       /* 16px — MD3 divider breathing room */
+  border-top: 1px solid var(--border-color);
+}
+
+/* Hot (hero) card — MD3: 28px padding, 20px between sections */
+.card-hot {
+  padding: 1.75rem;        /* 28px — hero cards get more breathing room */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;             /* 24px between sections — MD3 xl */
+}
+
+@media (min-width: 768px) {
+  .card-hot {
+    padding: 2.25rem;      /* 36px on md+ — generous hero breathing room */
+  }
+}
+
+.card-hot .card-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.25rem;
+  padding-top: 1.25rem;    /* 20px — MD3 section divider */
+  border-top: 1px solid var(--border-color);
+}
+
+/* Secondary sources accordion */
+.card-sources {
+  margin-top: 0.5rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px dashed var(--border-color);
+  background: color-mix(in srgb, var(--bg-app) 50%, transparent);
+}
+
+.card-sources ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.card-sources li {
+  padding-top: 0.625rem;
+  border-top: 1px solid color-mix(in srgb, var(--border-color) 40%, transparent);
+}
+
+.card-sources li:first-child {
+  padding-top: 0;
+  border-top: none;
 }
 
 /* Base Badge Style */

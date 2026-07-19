@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
 import StoryCard from "../components/StoryCard";
 import styles from "./page.module.css";
 
@@ -42,13 +42,16 @@ const TeamCrest = ({ teamName }) => {
 
   if (data.crest && !imgError) {
     return (
-      <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 6px ${data.glow})` }}>
+      <div 
+        className="w-10 h-10 shrink-0 flex items-center justify-center transition-transform duration-300 hover:scale-110" 
+        style={{ filter: `drop-shadow(0 0 8px ${data.glow})` }}
+      >
         <img
           src={data.crest}
           alt={`${teamName} crest`}
           width={38}
           height={38}
-          style={{ objectFit: "contain", display: "block" }}
+          className="object-contain block"
           onError={() => setImgError(true)}
         />
       </div>
@@ -57,7 +60,10 @@ const TeamCrest = ({ teamName }) => {
 
   // Fallback: generic shield
   return (
-    <div className={styles.crestWrapper} style={{ filter: `drop-shadow(0 0 4px ${data.glow})` }}>
+    <div 
+      className="w-10 h-10 shrink-0 flex items-center justify-center transition-transform duration-300 hover:scale-110" 
+      style={{ filter: `drop-shadow(0 0 6px ${data.glow})` }}
+    >
       <svg width="38" height="38" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" fill="#374151" />
         <path d="M16 2.5C10 2.5 7 5.5 7 11c0 8 6 15.5 9 18.5 3-3 9-10.5 9-18.5 0-5.5-3-8.5-9-8.5z" stroke="#9CA3AF" strokeWidth="1.5" />
@@ -315,226 +321,192 @@ export default function Home() {
 
   return (
     <div className="app-container">
-      <Sidebar
+      <Navbar
         activeTopic={activeTopic}
         setActiveTopic={setActiveTopic}
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
         theme={theme}
         setTheme={handleSetTheme}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        loading={loading}
+        isRefreshing={isRefreshing}
+        totalNarratives={totalNarratives}
+        totalPublishers={totalPublishers}
+        lastUpdated={lastUpdated}
+        refreshCountdown={refreshCountdown}
+        handleManualRefresh={handleManualRefresh}
       />
 
-      <main className={styles.mainContent}>
-        {/* Top Header Bar */}
-        <header className={styles.topBar}>
-          <div className={styles.searchWrapper}>
-            <span className={styles.searchIcon}>🔍</span>
-            <input
-              type="text"
-              placeholder="Search headlines, sources, categories..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className={styles.searchInput}
-              id="search-input"
-            />
-          </div>
-
-          <div className={styles.statsIndicator}>
-            <span className={`${styles.statusDot} ${isRefreshing ? styles.statusDotRefreshing : ""}`}></span>
-            <span className={styles.statsText}>
-              Anfield Engine: {loading ? <strong>Updating Feed...</strong> : <strong>Live Stream</strong>} &bull; Clustered{" "}
-              <strong>{totalNarratives}</strong> LFC narratives from{" "}
-              <strong>{totalPublishers}</strong> newsrooms
-            </span>
-            {!loading && lastUpdated && (
-              <span className={styles.refreshMeta}>
-                Updated {formatLastUpdated(lastUpdated)}
-                <span className={styles.refreshCountdown}>
-                  &nbsp;&bull; next in {formatCountdown(refreshCountdown)}
-                </span>
-              </span>
-            )}
-            <button
-              id="manual-refresh-btn"
-              className={`${styles.refreshBtn} ${isRefreshing ? styles.refreshBtnSpinning : ""}`}
-              onClick={handleManualRefresh}
-              disabled={loading || isRefreshing}
-              title="Refresh feed now"
-              aria-label="Refresh news feed"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="23 4 23 10 17 10" />
-                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
-              </svg>
-            </button>
-          </div>
-        </header>
-
-        {/* Scrollable feed area */}
-        <section className={styles.feedScrollContainer}>
-          <div className={styles.feedHeader}>
-            <div>
-              <h2 className={styles.feedTitle}>
-                {activeTopic === "all" ? "The Anfield Feed" : activeTopic}
-              </h2>
-              <p className={styles.feedSubtitle}>
-                Aggregated real-time coverage from Anfield and global sports desks.
-              </p>
-            </div>
+      <main className="flex-1 flex flex-col relative bg-bg-app min-w-0">
+        
+        {/* Main Feed Container */}
+        <section className="container-bounded flex-1" style={{ paddingTop: "2.5rem", paddingBottom: "3rem" }}>
+          
+          {/* Feed Header */}
+          <div style={{ marginBottom: "2rem", paddingBottom: "1.25rem", borderBottom: "1px solid var(--border-color)" }}>
+            <h2 className="font-heading text-2xl md:text-3xl font-black tracking-tight text-text-primary">
+              {activeTopic === "all" ? "The Anfield Feed" : activeTopic}
+            </h2>
+            <p className="text-xs md:text-sm text-text-muted mt-1 font-medium">
+              Aggregated real-time coverage from Anfield and global sports desks.
+            </p>
 
             {/* Display active filter tags if applicable */}
             {(activeTopic !== "all" || activeCategory !== "All" || searchQuery !== "") && (
-              <div className={styles.activeFiltersRow}>
+              <div className="flex flex-wrap gap-2 mt-4">
                 {activeTopic !== "all" && (
-                  <span className={styles.filterTag}>Topic: {activeTopic}</span>
+                  <span className="bg-accent-glow text-accent border border-border-active/40 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase">
+                    Topic: {activeTopic}
+                  </span>
                 )}
                 {activeCategory !== "All" && (
-                  <span className={styles.filterTag}>Type: {activeCategory}</span>
+                  <span className="bg-accent-glow text-accent border border-border-active/40 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase">
+                    Type: {activeCategory}
+                  </span>
                 )}
                 {searchQuery !== "" && (
-                  <span className={styles.filterTag}>Search: "{searchQuery}"</span>
+                  <span className="bg-accent-glow text-accent border border-border-active/40 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase">
+                    Search: "{searchQuery}"
+                  </span>
                 )}
               </div>
             )}
           </div>
 
-          {/* Match Scoreboard Banner */}
+          {/* Broadcast Scoreboard Banner */}
           {match && (
-            <div className={styles.scoreboardGradientWrap}>
-              <div className={styles.scoreboardContainer}>
-              <div className={styles.scoreboardHeader}>
-                <span className={styles.competitionLabel}>{match.competition}</span>
-                <span className={styles.headerDetail}>
-                  <span className={styles.headerDetailIcon}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: "inline-block", verticalAlign: "middle" }}>
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                      <line x1="16" y1="2" x2="16" y2="6" />
-                      <line x1="8" y1="2" x2="8" y2="6" />
-                      <line x1="3" y1="10" x2="21" y2="10" />
-                    </svg>
-                  </span>{" "}
+            <div
+              className="relative w-full bg-gradient-to-r from-red-600/90 via-red-700/90 to-red-800/90 dark:from-red-950/80 dark:via-red-900/80 dark:to-neutral-950/80 backdrop-blur-md rounded-2xl border border-red-500/20 overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-red-500/10 flex flex-col md:flex-row items-center justify-between"
+              style={{ padding: "1.25rem 1.75rem", gap: "1.25rem", marginBottom: "2rem" }}
+            >
+              
+              {/* Competition Label */}
+              <div className="flex items-center gap-3 shrink-0">
+                <span className="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/10">
+                  {match.competition}
+                </span>
+                <span className="text-[10px] text-red-100 dark:text-red-300 font-bold uppercase tracking-wider">
                   {formatKickoffDate(match.kickoffISO)}
                 </span>
-                {match.venue && (
-                  <span className={styles.headerDetail}>
-                    <span className={styles.headerDetailIcon}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: "inline-block", verticalAlign: "middle" }}>
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                        <circle cx="12" cy="10" r="3" />
-                      </svg>
-                    </span>{" "}
-                    {match.venue.toUpperCase()}
-                  </span>
-                )}
               </div>
 
-              <div className={styles.scoreboardBody}>
-                <div className={styles.teamsStackedList}>
-                  <div className={styles.teamRow}>
-                    <TeamCrest teamName={match.homeTeam} />
-                    <span
-                      className={styles.teamNameStacked}
-                      style={{ color: getTeamNameColor(getTeamData(match.homeTeam), theme === "dark") }}
-                    >
-                      {match.homeTeam}
-                    </span>
-                    {(match.status === "LIVE" || match.status === "FINISHED") && (
-                      <span className={styles.teamScoreStacked}>{match.homeScore}</span>
-                    )}
-                  </div>
-                  <div className={styles.teamRow}>
-                    <TeamCrest teamName={match.awayTeam} />
-                    <span
-                      className={styles.teamNameStacked}
-                      style={{ color: getTeamNameColor(getTeamData(match.awayTeam), theme === "dark") }}
-                    >
-                      {match.awayTeam}
-                    </span>
-                    {(match.status === "LIVE" || match.status === "FINISHED") && (
-                      <span className={styles.teamScoreStacked}>{match.awayScore}</span>
-                    )}
-                  </div>
+              {/* Teams & Scoreboard horizontal ticker */}
+              <div className="flex items-center gap-4 sm:gap-6 flex-1 justify-center max-w-xl w-full">
+                {/* Home team */}
+                <div className="flex items-center gap-3 justify-end flex-1 min-w-0">
+                  <span className="text-sm sm:text-base font-black text-white truncate text-right">
+                    {match.homeTeam}
+                  </span>
+                  <TeamCrest teamName={match.homeTeam} />
                 </div>
 
+                {/* Score / VS capsule */}
+                <div className="shrink-0 flex items-center justify-center">
+                  {(match.status === "LIVE" || match.status === "FINISHED") ? (
+                    <div className="flex items-center gap-2.5 bg-black/40 border border-white/10 px-4.5 py-1.5 rounded-xl font-mono text-base sm:text-lg font-black text-white shadow-inner">
+                      <span>{match.homeScore}</span>
+                      <span className="text-white/40 font-normal">:</span>
+                      <span>{match.awayScore}</span>
+                    </div>
+                  ) : (
+                    <div className="bg-black/30 border border-white/5 px-3 py-1 rounded-xl text-[10px] font-black text-white uppercase tracking-widest">
+                      VS
+                    </div>
+                  )}
+                </div>
+
+                {/* Away team */}
+                <div className="flex items-center gap-3 justify-start flex-1 min-w-0">
+                  <TeamCrest teamName={match.awayTeam} />
+                  <span className="text-sm sm:text-base font-black text-white truncate text-left">
+                    {match.awayTeam}
+                  </span>
+                </div>
+              </div>
+
+              {/* Status / Countdown segment */}
+              <div className="shrink-0 flex items-center gap-2">
                 {match.status === "SCHEDULED" && countdownValues ? (
-                  <div className={styles.countdownColumn}>
-                    <div className={styles.countdownItem}>
-                      <span className={styles.countdownCircle}>{countdownValues.days}</span>
-                      <span className={styles.countdownLabel}>DAYS</span>
-                    </div>
-                    <div className={styles.countdownItem}>
-                      <span className={styles.countdownCircle}>{countdownValues.hours}</span>
-                      <span className={styles.countdownLabel}>HRS</span>
-                    </div>
-                    <div className={styles.countdownItem}>
-                      <span className={styles.countdownCircle}>{countdownValues.minutes}</span>
-                      <span className={styles.countdownLabel}>MIN</span>
-                    </div>
-                    <div className={styles.countdownItem}>
-                      <span className={styles.countdownCircle}>{countdownValues.seconds}</span>
-                      <span className={styles.countdownLabel}>SEC</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] font-black text-white/60 tracking-wider">KICKOFF IN:</span>
+                    <div className="flex items-center gap-1.5 bg-black/40 px-2.5 py-1 rounded-lg border border-white/10 font-mono text-xs font-bold text-white">
+                      <span>{countdownValues.days}d</span>
+                      <span>{countdownValues.hours}h</span>
+                      <span>{countdownValues.minutes}m</span>
                     </div>
                   </div>
                 ) : (
-                  <div className={styles.statusColumn}>
-                    {match.status === "LIVE" ? (
-                      <span className={styles.liveBadgeLarge}>LIVE</span>
-                    ) : (
-                      <span className={styles.finishedBadge}>FT</span>
-                    )}
-                    <span className={styles.matchTimeLabelLarge}>{match.matchTime}</span>
+                  <div className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-full border border-white/10 text-xs font-bold text-white">
+                    <span className={`w-1.5 h-1.5 rounded-full ${match.status === "LIVE" ? "bg-red-500 animate-pulse" : "bg-white/40"}`}></span>
+                    <span>{match.status === "LIVE" ? "LIVE" : "FT"}</span>
+                    {match.matchTime && <span className="text-white/60 border-l border-white/20 pl-1.5">{match.matchTime}</span>}
                   </div>
                 )}
               </div>
-            </div>
+
             </div>
           )}
 
+          {/* Feed Content rendering states */}
           {loading ? (
-            <div className={styles.skeletonList}>
-              <div className={styles.skeletonCard}></div>
-              <div className={styles.skeletonCard}></div>
-              <div className={styles.skeletonCard}></div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(1, 1fr)", gap: "1.5rem" }}>
+              <div className="h-44 rounded-2xl bg-bg-card animate-pulse border border-border-color"></div>
+              <div className="h-44 rounded-2xl bg-bg-card animate-pulse border border-border-color"></div>
+              <div className="h-44 rounded-2xl bg-bg-card animate-pulse border border-border-color"></div>
             </div>
           ) : error ? (
-            <div className={styles.errorState}>
-              <h3 className={styles.errorTitle}>Failed to load feeds</h3>
-              <p>{error}</p>
+            <div className="flex flex-col items-center justify-center p-8 bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-2xl text-center">
+              <h3 className="font-heading text-lg font-bold mb-2">Failed to load feeds</h3>
+              <p className="text-sm">{error}</p>
             </div>
           ) : filteredFeed.length === 0 ? (
-            <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>🔴</div>
-              <h3 className={styles.emptyTitle}>No matching LFC headlines</h3>
-              <p className={styles.emptyText}>
+            <div className="flex flex-col items-center justify-center py-20 px-4 text-center text-text-muted">
+              <div className="text-5xl mb-4">🔴</div>
+              <h3 className="font-heading text-lg font-bold text-text-primary mb-2">No matching LFC headlines</h3>
+              <p className="text-sm max-w-sm leading-relaxed">
                 We couldn't find any clustered narratives matching your search criteria. Walk on with hope, or try resetting the search bar.
               </p>
             </div>
           ) : (
-            <div className={styles.feedList}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
               {/* Render Hot Coverage Bucket */}
               {hotCoverage.length > 0 && (
-                <>
-                  <div className={styles.timeDivider}>
-                    <span className={styles.timeLabel}>🔥 Hot Coverage</span>
-                    <span className={styles.timeLine}></span>
+                <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                  {/* Section label */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                    <span className="font-heading text-xs font-black uppercase tracking-widest text-accent" style={{ flexShrink: 0 }}>
+                      🔥 Hot Coverage
+                    </span>
+                    <div style={{ height: "1px", background: "var(--border-color)", flex: 1 }}></div>
                   </div>
-                  {hotCoverage.map((story) => (
-                    <StoryCard key={story.narrative_id} story={story} />
-                  ))}
-                </>
+                  {/* Hot cards — stacked with 20px gap */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                    {hotCoverage.map((story) => (
+                      <StoryCard key={story.narrative_id} story={story} />
+                    ))}
+                  </div>
+                </div>
               )}
 
               {/* Render Standard Timeline Bucket */}
               {standardFeed.length > 0 && (
-                <>
-                  <div className={styles.timeDivider}>
-                    <span className={styles.timeLabel}>🕒 LFC Timeline Stream</span>
-                    <span className={styles.timeLine}></span>
+                <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                  {/* Section label */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                    <span className="font-heading text-xs font-black uppercase tracking-widest text-accent" style={{ flexShrink: 0 }}>
+                      🕒 LFC Timeline Stream
+                    </span>
+                    <div style={{ height: "1px", background: "var(--border-color)", flex: 1 }}></div>
                   </div>
-                  {standardFeed.map((story) => (
-                    <StoryCard key={story.narrative_id} story={story} />
-                  ))}
-                </>
+                  {/* 3-col responsive grid */}
+                  <div className="feed-grid">
+                    {standardFeed.map((story) => (
+                      <StoryCard key={story.narrative_id} story={story} />
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
           )}
