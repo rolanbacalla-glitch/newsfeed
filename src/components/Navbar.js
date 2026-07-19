@@ -189,16 +189,16 @@ export default function Navbar({
       {/* Lower row: Topics tabs (Left) & Category pills (Right) */}
       <div className="border-t border-border-color bg-bg-sidebar/80 backdrop-blur-md">
         <div
-          className="container-bounded flex flex-col lg:flex-row lg:items-center justify-between gap-3"
-          style={{ paddingTop: "0.625rem", paddingBottom: "0.625rem" }}
+          className="container-bounded flex flex-col gap-4"
+          style={{ paddingTop: "0.875rem", paddingBottom: "0.875rem" }}
         >
 
-          {/* Topics Navigation (Left) */}
-          <div className="flex items-center overflow-x-auto no-scrollbar" style={{ gap: "0.75rem" }}>
+          {/* Topics Navigation (Top Left) */}
+          <div className="flex items-center overflow-x-auto no-scrollbar" style={{ gap: "0.875rem" }}>
             <span
               className="shrink-0 hidden sm:inline"
               style={{
-                fontSize: "11px",
+                fontSize: "12px",
                 fontWeight: 800,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
@@ -212,9 +212,9 @@ export default function Navbar({
             {/* vertical rule */}
             <span
               className="hidden sm:block shrink-0"
-              style={{ width: "1px", height: "20px", background: "var(--border-color)", marginRight: "0.25rem" }}
+              style={{ width: "1px", height: "24px", background: "var(--border-color)", marginRight: "0.25rem" }}
             />
-            <nav className="flex items-center" style={{ gap: "0.5rem" }}>
+            <nav className="flex items-center" style={{ gap: "0.625rem" }}>
               {topics.map((topic) => {
                 const isActive = activeTopic === topic.id;
                 return (
@@ -224,10 +224,10 @@ export default function Navbar({
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: "0.375rem",
-                      padding: "0.4rem 0.875rem",
-                      borderRadius: "0.625rem",
-                      fontSize: "13px",
+                      gap: "0.5rem",
+                      padding: "0.5rem 1rem",
+                      borderRadius: "0.75rem",
+                      fontSize: "14px",
                       fontWeight: isActive ? 700 : 600,
                       whiteSpace: "nowrap",
                       cursor: "pointer",
@@ -237,7 +237,7 @@ export default function Navbar({
                       color: isActive ? "var(--accent)" : "var(--text-secondary)",
                     }}
                   >
-                    <span style={{ fontSize: "15px", lineHeight: 1 }}>{topic.icon}</span>
+                    <span style={{ fontSize: "16px", lineHeight: 1 }}>{topic.icon}</span>
                     <span>{topic.name}</span>
                   </button>
                 );
@@ -245,18 +245,12 @@ export default function Navbar({
             </nav>
           </div>
 
-          {/* Divider — hidden on small screens */}
-          <span
-            className="hidden lg:block shrink-0"
-            style={{ width: "1px", height: "28px", background: "var(--border-color)", opacity: 0.6 }}
-          />
-
-          {/* Category Filter Pills (Right) */}
-          <div className="flex items-center overflow-x-auto no-scrollbar" style={{ gap: "0.625rem" }}>
+          {/* Category Filter Pills (Bottom Right) */}
+          <div className="flex items-center overflow-x-auto no-scrollbar self-start sm:self-end w-full sm:w-auto" style={{ gap: "0.75rem" }}>
             <span
               className="shrink-0"
               style={{
-                fontSize: "11px",
+                fontSize: "12px",
                 fontWeight: 800,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
@@ -269,9 +263,9 @@ export default function Navbar({
             </span>
             <span
               className="shrink-0"
-              style={{ width: "1px", height: "20px", background: "var(--border-color)", marginRight: "0.25rem" }}
+              style={{ width: "1px", height: "24px", background: "var(--border-color)", marginRight: "0.25rem" }}
             />
-            <div className="flex items-center" style={{ gap: "0.5rem" }}>
+            <div className="flex items-center" style={{ gap: "0.625rem" }}>
               {categories.map((cat) => {
                 const isActive = activeCategory === cat;
                 return (
@@ -279,9 +273,9 @@ export default function Navbar({
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
                     style={{
-                      padding: "0.4rem 0.875rem",
-                      borderRadius: "0.625rem",
-                      fontSize: "13px",
+                      padding: "0.5rem 1rem",
+                      borderRadius: "0.75rem",
+                      fontSize: "14px",
                       fontWeight: isActive ? 700 : 600,
                       whiteSpace: "nowrap",
                       cursor: "pointer",
