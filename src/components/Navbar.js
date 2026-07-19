@@ -265,7 +265,7 @@ export default function Navbar({
               className="shrink-0"
               style={{ width: "1px", height: "24px", background: "var(--border-color)", marginRight: "0.25rem" }}
             />
-            <div className="flex items-center" style={{ gap: "0.625rem" }}>
+            <div className="flex items-center" style={{ gap: "0.5rem" }}>
               {categories.map((cat) => {
                 const isActive = activeCategory === cat;
                 return (
@@ -273,17 +273,19 @@ export default function Navbar({
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
                     style={{
-                      padding: "0.5rem 1rem",
-                      borderRadius: "0.75rem",
-                      fontSize: "14px",
-                      fontWeight: isActive ? 700 : 600,
+                      padding: "0.35rem 0.875rem",
+                      borderRadius: "9999px",
+                      fontSize: "12px",
+                      fontWeight: isActive ? 800 : 600,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
                       whiteSpace: "nowrap",
                       cursor: "pointer",
-                      transition: "all 0.18s ease",
-                      border: `1px solid ${isActive ? "var(--text-primary)" : "transparent"}`,
+                      transition: "all 0.2s ease",
+                      border: `1px solid ${isActive ? "var(--text-primary)" : "var(--border-color)"}`,
                       background: isActive ? "var(--text-primary)" : "transparent",
                       color: isActive ? "var(--bg-app)" : "var(--text-secondary)",
-                      boxShadow: isActive ? "0 1px 4px rgba(0,0,0,0.18)" : "none",
+                      boxShadow: isActive ? "0 2px 6px rgba(0,0,0,0.15)" : "none",
                     }}
                   >
                     {cat}
