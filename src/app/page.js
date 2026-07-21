@@ -10,17 +10,17 @@ import styles from "./page.module.css";
 // darkText  = vivid shade for dark backgrounds
 // lightText = deep/muted shade for light backgrounds
 const TEAM_DATA = {
-  liverpool:  { crest: "https://crests.football-data.org/64.png",   darkText: "#FF4D6A", lightText: "#A00D24", glow: "rgba(200,16,46,0.5)"    },
-  sunderland: { crest: "https://crests.football-data.org/394.png",  darkText: "#FF5566", lightText: "#9A000E", glow: "rgba(235,23,43,0.45)"   },
-  wrexham:    { crest: "https://crests.football-data.org/8650.png", darkText: "#FF6B80", lightText: "#9B0000", glow: "rgba(220,20,60,0.4)"    },
-  arsenal:    { crest: "https://crests.football-data.org/57.png",   darkText: "#FF5055", lightText: "#9A0005", glow: "rgba(239,1,7,0.45)"     },
-  leeds:      { crest: "https://crests.football-data.org/341.png",  darkText: "#FFD700", lightText: "#1D428A", glow: "rgba(255,205,0,0.5)"    },
-  monaco:     { crest: "https://crests.football-data.org/1903.png", darkText: "#FF5566", lightText: "#8B000C", glow: "rgba(206,17,38,0.45)"   },
-  como:       { crest: "https://crests.football-data.org/5890.png", darkText: "#6699FF", lightText: "#001A66", glow: "rgba(0,51,153,0.45)"    },
-  newcastle:  { crest: "https://crests.football-data.org/67.png",   darkText: "#E0E0E0", lightText: "#241F20", glow: "rgba(200,200,200,0.3)"  },
-  nottingham: { crest: "https://crests.football-data.org/351.png",  darkText: "#FF5555", lightText: "#880000", glow: "rgba(221,0,0,0.45)"     },
-  forest:     { crest: "https://crests.football-data.org/351.png",  darkText: "#FF5555", lightText: "#880000", glow: "rgba(221,0,0,0.45)"     },
-  default:    { crest: null,                                         darkText: "#9CA3AF", lightText: "#374151", glow: "rgba(107,114,128,0.3)"  },
+  liverpool: { crest: "https://crests.football-data.org/64.png", darkText: "#FF4D6A", lightText: "#A00D24", glow: "rgba(200,16,46,0.5)" },
+  sunderland: { crest: "https://crests.football-data.org/394.png", darkText: "#FF5566", lightText: "#9A000E", glow: "rgba(235,23,43,0.45)" },
+  wrexham: { crest: "https://crests.football-data.org/8650.png", darkText: "#FF6B80", lightText: "#9B0000", glow: "rgba(220,20,60,0.4)" },
+  arsenal: { crest: "https://crests.football-data.org/57.png", darkText: "#FF5055", lightText: "#9A0005", glow: "rgba(239,1,7,0.45)" },
+  leeds: { crest: "https://crests.football-data.org/341.png", darkText: "#FFD700", lightText: "#1D428A", glow: "rgba(255,205,0,0.5)" },
+  monaco: { crest: "https://crests.football-data.org/1903.png", darkText: "#FF5566", lightText: "#8B000C", glow: "rgba(206,17,38,0.45)" },
+  como: { crest: "https://crests.football-data.org/5890.png", darkText: "#6699FF", lightText: "#001A66", glow: "rgba(0,51,153,0.45)" },
+  newcastle: { crest: "https://crests.football-data.org/67.png", darkText: "#E0E0E0", lightText: "#241F20", glow: "rgba(200,200,200,0.3)" },
+  nottingham: { crest: "https://crests.football-data.org/351.png", darkText: "#FF5555", lightText: "#880000", glow: "rgba(221,0,0,0.45)" },
+  forest: { crest: "https://crests.football-data.org/351.png", darkText: "#FF5555", lightText: "#880000", glow: "rgba(221,0,0,0.45)" },
+  default: { crest: null, darkText: "#9CA3AF", lightText: "#374151", glow: "rgba(107,114,128,0.3)" },
 };
 
 function getTeamData(teamName) {
@@ -42,8 +42,8 @@ const TeamCrest = ({ teamName }) => {
 
   if (data.crest && !imgError) {
     return (
-      <div 
-        className="w-10 h-10 shrink-0 flex items-center justify-center transition-transform duration-300 hover:scale-110" 
+      <div
+        className="w-10 h-10 shrink-0 flex items-center justify-center transition-transform duration-300 hover:scale-110"
         style={{ filter: `drop-shadow(0 0 8px ${data.glow})` }}
       >
         <img
@@ -60,8 +60,8 @@ const TeamCrest = ({ teamName }) => {
 
   // Fallback: generic shield
   return (
-    <div 
-      className="w-10 h-10 shrink-0 flex items-center justify-center transition-transform duration-300 hover:scale-110" 
+    <div
+      className="w-10 h-10 shrink-0 flex items-center justify-center transition-transform duration-300 hover:scale-110"
       style={{ filter: `drop-shadow(0 0 6px ${data.glow})` }}
     >
       <svg width="38" height="38" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -93,13 +93,13 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [theme, setTheme] = useState("dark");
   const [mounted, setMounted] = useState(false);
-  
+
   // Live Feed Data State
   const [feed, setFeed] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshCountdown, setRefreshCountdown] = useState(300);
-  
+
   // Scoreboard match state
   const [match, setMatch] = useState(null);
 
@@ -340,12 +340,12 @@ export default function Home() {
       />
 
       <main className="flex-1 flex flex-col relative bg-bg-app min-w-0">
-        
+
         {/* Main Feed Container */}
         <section className="container-bounded flex-1" style={{ paddingTop: "2.5rem", paddingBottom: "3rem" }}>
-          
+
           {/* Feed Header */}
-          <div style={{ marginBottom: "2rem", paddingBottom: "1.25rem", borderBottom: "1px solid var(--border-color)" }}>
+          <div style={{ marginBottom: "1rem", paddingBottom: "1.25rem", borderBottom: "1px solid var(--border-color)" }}>
             <h2 className="font-heading text-2xl md:text-3xl font-black tracking-tight text-text-primary">
               {activeTopic === "all" ? "The Anfield Feed" : activeTopic}
             </h2>
@@ -355,7 +355,7 @@ export default function Home() {
 
             {/* Display active filter tags if applicable */}
             {(activeTopic !== "all" || activeCategory !== "All" || searchQuery !== "") && (
-              <div className="flex flex-wrap gap-2 mt-4">
+              <div className="flex flex-wrap gap-2" style={{ marginTop: '1rem' }}>
                 {activeTopic !== "all" && (
                   <span className="bg-accent-glow text-accent border border-border-active/40 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase">
                     Topic: {activeTopic}
@@ -381,7 +381,7 @@ export default function Home() {
               className="relative w-full bg-gradient-to-r from-red-600/90 via-red-700/90 to-red-800/90 dark:from-red-950/80 dark:via-red-900/80 dark:to-neutral-950/80 backdrop-blur-md rounded-2xl border border-red-500/20 overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-red-500/10 flex flex-col md:flex-row items-center justify-between"
               style={{ padding: "1.25rem 1.75rem", gap: "1.25rem", marginBottom: "2rem" }}
             >
-              
+
               {/* Competition Label */}
               <div className="flex flex-wrap items-center gap-3 shrink-0 justify-center md:justify-start">
                 <span className="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/10">
@@ -393,7 +393,7 @@ export default function Home() {
                 {match.venue && (
                   <span className="text-[10px] text-white/80 font-bold uppercase tracking-wider flex items-center gap-1">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" opacity="0.8">
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                     </svg>
                     {match.venue}
                   </span>

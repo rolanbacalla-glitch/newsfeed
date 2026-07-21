@@ -134,7 +134,8 @@ export default function Navbar({
             placeholder="Search LFC headlines, sources..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-bg-app border border-border-color text-text-primary pl-9 pr-4 py-2 rounded-xl text-xs font-sans outline-none focus:border-accent focus:ring-2 focus:ring-accent-glow transition-all duration-200"
+            className="w-full bg-bg-app border border-border-color text-text-primary pr-4 py-2 rounded-xl text-xs font-sans outline-none focus:border-accent focus:ring-2 focus:ring-accent-glow transition-all duration-200"
+            style={{ paddingLeft: '2.25rem' }}
             id="search-input-navbar"
           />
         </div>
