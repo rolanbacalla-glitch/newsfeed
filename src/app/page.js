@@ -384,7 +384,7 @@ export default function Home() {
 
               {/* Competition Label */}
               <div className="flex flex-wrap items-center gap-3 shrink-0 justify-center md:justify-start">
-                <span className="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/10">
+                <span className="px-4.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/15 shadow-inner inline-flex items-center justify-center whitespace-nowrap leading-none shrink-0">
                   {match.competition}
                 </span>
                 <span className="text-[10px] text-red-100 dark:text-red-300 font-bold uppercase tracking-wider">
