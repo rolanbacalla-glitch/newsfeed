@@ -13,18 +13,86 @@ function getRelativeTime(isoString) {
   return `${diffDays}d ago`;
 }
 
-const FALLBACK_IMAGES = {
-  transfer: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1000&q=80",
-  injury: "https://images.unsplash.com/photo-1518604666860-9ed391f76460?auto=format&fit=crop&w=1000&q=80",
-  "match report": "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1000&q=80",
-  analysis: "https://images.unsplash.com/photo-1517649763962-0c623266010b?auto=format&fit=crop&w=1000&q=80",
-  opinion: "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?auto=format&fit=crop&w=1000&q=80",
-  default: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1000&q=80",
-};
+// ─── Option 1: Branded LFC Crest & Mesh Gradient Card ────────────────────────
+function BrandFallbackThumbnail({ category, subTopic }) {
+  const getCategoryLabel = (cat) => {
+    const c = (cat || "").toLowerCase();
+    switch (c) {
+      case "transfer":
+        return "TRANSFER INSIDER";
+      case "injury":
+        return "INJURY REPORT";
+      case "match report":
+        return "MATCH DAY DESK";
+      case "analysis":
+        return "TACTICAL ANALYSIS";
+      case "opinion":
+        return "ANFIELD OPINION";
+      default:
+        return "ANFIELD COVERAGE";
+    }
+  };
 
-function getFallbackImage(category) {
-  const cat = (category || "").toLowerCase();
-  return FALLBACK_IMAGES[cat] || FALLBACK_IMAGES.default;
+  return (
+    <div className="w-full h-full min-h-[220px] relative flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-red-950 via-zinc-950 to-black select-none group">
+      {/* Background pitch grid SVG overlay */}
+      <svg
+        className="absolute inset-0 w-full h-full opacity-15 pointer-events-none"
+        xmlns="http://www.w3.org/2000/svg"
+        width="100%"
+        height="100%"
+      >
+        <defs>
+          <pattern id="pitchGrid" width="32" height="32" patternUnits="userSpaceOnUse">
+            <path d="M 32 0 L 0 0 0 32" fill="none" stroke="currentColor" strokeWidth="1" className="text-red-500" />
+            <circle cx="16" cy="16" r="8" fill="none" stroke="currentColor" strokeWidth="1" className="text-red-500" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#pitchGrid)" />
+      </svg>
+
+      {/* Radial red ambient glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-600/30 via-red-900/10 to-transparent pointer-events-none" />
+
+      {/* Center Crest & Watermark */}
+      <div className="relative z-10 flex flex-col items-center justify-center p-4 gap-2 text-center transition-transform duration-500 group-hover:scale-105">
+        {/* LFC Crest */}
+        <div className="w-14 h-14 md:w-16 md:h-16 shrink-0 flex items-center justify-center drop-shadow-[0_0_16px_rgba(239,68,68,0.6)]">
+          <img
+            src="https://crests.football-data.org/64.png"
+            alt="Liverpool FC"
+            className="w-full h-full object-contain block"
+          />
+        </div>
+
+        {/* Category Watermark Label */}
+        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-red-500/90 dark:text-red-400/90 drop-shadow-sm mt-1">
+          {getCategoryLabel(category)}
+        </span>
+
+        <span className="text-[9px] font-extrabold uppercase tracking-widest text-zinc-400/80">
+          REDLINE LFC • {subTopic || "Liverpool FC"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function ArticleImage({ src, alt, category, subTopic }) {
+  const [imgFailed, setImgFailed] = useState(false);
+
+  if (!src || imgFailed) {
+    return <BrandFallbackThumbnail category={category} subTopic={subTopic} />;
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 brightness-95 dark:brightness-90"
+      onError={() => setImgFailed(true)}
+    />
+  );
 }
 
 export default function StoryCard({ story }) {
@@ -54,8 +122,6 @@ export default function StoryCard({ story }) {
 
   // ─── Hot / Hero Editorial Card ───────────────────────────────────────────────
   if (isHot) {
-    const cardImage = story.imageUrl || getFallbackImage(story.category);
-
     return (
       <article
         className="card-hot relative w-full bg-gradient-to-br from-bg-card to-red-500/[0.02] dark:to-red-500/[0.04] backdrop-blur-md border border-border-color border-l-4 border-l-red-600 dark:border-l-red-500 hover:border-red-500/30 rounded-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-red-500/5 group flex flex-col md:flex-row overflow-hidden"
@@ -63,14 +129,11 @@ export default function StoryCard({ story }) {
       >
         {/* Left Side Thumbnail photo occupying the left side of the card */}
         <div className="card-hot-image-wrapper w-full md:w-5/12 lg:w-4/12 shrink-0 relative overflow-hidden bg-zinc-900 min-h-[240px] md:min-h-full">
-          <img
-            src={cardImage}
+          <ArticleImage
+            src={story.imageUrl}
             alt={story.primary_headline}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 brightness-95 dark:brightness-90"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = getFallbackImage(story.category);
-            }}
+            category={story.category}
+            subTopic={story.sub_topic}
           />
           {/* Subtle gradient overlays */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-bg-card/50 pointer-events-none" />
