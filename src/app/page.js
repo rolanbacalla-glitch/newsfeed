@@ -111,7 +111,7 @@ function MatchCenterBanner({ match, countdownValues }) {
   ];
 
   return (
-    <div className="relative w-full bg-gradient-to-r from-red-600/90 via-red-700/90 to-red-800/90 dark:from-red-950/85 dark:via-red-900/85 dark:to-neutral-950/90 backdrop-blur-md rounded-2xl border border-red-500/20 overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/10 mb-8">
+    <div className="relative w-full bg-gradient-to-r from-red-600/90 via-red-700/90 to-red-800/90 dark:from-red-950/85 dark:via-red-900/85 dark:to-neutral-950/90 backdrop-blur-md rounded-2xl border border-red-500/20 overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/10 mb-14">
       {/* Banner Header Bar with Toggle */}
       <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 border-b border-white/10 bg-black/25">
         <div className="flex items-center gap-3">
@@ -152,9 +152,9 @@ function MatchCenterBanner({ match, countdownValues }) {
 
       {/* COMPACT VIEW (Design 1 Header Ticker) */}
       {!isExpanded ? (
-        <div className="p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4">
-          {/* Teams & Scoreboard horizontal ticker */}
-          <div className="flex items-center gap-4 sm:gap-6 flex-1 justify-center max-w-xl w-full">
+        <div className="p-4 sm:p-5 flex flex-col md:flex-row items-center justify-center gap-6 text-center relative">
+          {/* Teams & Scoreboard horizontal ticker Centered */}
+          <div className="flex items-center gap-4 sm:gap-6 justify-center max-w-xl w-full mx-auto">
             {/* Home team */}
             <div className="flex items-center gap-3 justify-end flex-1 min-w-0">
               <span className="text-sm sm:text-base font-black text-white truncate text-right">
@@ -188,7 +188,7 @@ function MatchCenterBanner({ match, countdownValues }) {
           </div>
 
           {/* Status / Countdown segment */}
-          <div className="shrink-0 flex items-center gap-2">
+          <div className="shrink-0 flex items-center gap-2 md:absolute md:right-5">
             {match.status === "SCHEDULED" && countdownValues ? (
               <div className="flex items-center gap-2">
                 <span className="text-[9px] font-black text-white/60 tracking-wider">KICKOFF IN:</span>
