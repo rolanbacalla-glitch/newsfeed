@@ -113,11 +113,11 @@ function MatchCenterBanner({ match, countdownValues }) {
   return (
     <div className="relative w-full bg-gradient-to-r from-red-600/90 via-red-700/90 to-red-800/90 dark:from-red-950/85 dark:via-red-900/85 dark:to-neutral-950/90 backdrop-blur-md rounded-2xl border border-red-500/20 overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/10 mb-20">
       {/* Banner Header Bar with Toggle */}
-      <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 border-b border-white/10 bg-black/25">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between px-6 sm:px-8 py-3.5 border-b border-white/10 bg-black/25">
+        <div className="flex items-center gap-4">
           <span
             className="rounded-full text-[9px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/15 shadow-inner inline-flex items-center justify-center whitespace-nowrap leading-none shrink-0"
-            style={{ padding: "8px 14px" }}
+            style={{ padding: "10px 20px" }}
           >
             {match.competition}
           </span>
@@ -125,7 +125,7 @@ function MatchCenterBanner({ match, countdownValues }) {
             {formatKickoffDate(match.kickoffISO)}
           </span>
           {match.status === "LIVE" && (
-            <span className="flex items-center gap-1.5 bg-red-600 text-white text-[9px] font-black uppercase px-2.5 py-1 rounded-full animate-pulse shadow-md">
+            <span className="flex items-center gap-1.5 bg-red-600 text-white text-[9px] font-black uppercase px-3 py-1.5 rounded-full animate-pulse shadow-md">
               <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
               LIVE • {match.matchTime}
             </span>
@@ -135,7 +135,7 @@ function MatchCenterBanner({ match, countdownValues }) {
         {/* Sleek Toggle Button: [ Compact Score ] / [ Expand Stats ] */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-200 border border-white/20 text-white text-[10px] font-extrabold uppercase tracking-wider shadow-sm cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-200 border border-white/20 text-white text-[10px] font-extrabold uppercase tracking-wider shadow-sm cursor-pointer"
         >
           <span>{isExpanded ? "Compact Score" : "Expand Stats"}</span>
           <svg
@@ -150,29 +150,29 @@ function MatchCenterBanner({ match, countdownValues }) {
         </button>
       </div>
 
-      {/* COMPACT VIEW (Design 1 Header Ticker) */}
+      {/* COMPACT VIEW (Design 1 Header Ticker with Generous Consistent Padding) */}
       {!isExpanded ? (
-        <div className="p-4 sm:p-5 flex flex-col md:flex-row items-center justify-center gap-6 text-center relative">
+        <div className="p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center justify-center gap-6 text-center relative">
           {/* Teams & Scoreboard horizontal ticker Centered */}
-          <div className="flex items-center gap-4 sm:gap-6 justify-center max-w-xl w-full mx-auto">
+          <div className="flex items-center gap-4 sm:gap-8 justify-center max-w-2xl w-full mx-auto">
             {/* Home team */}
             <div className="flex items-center gap-3 justify-end flex-1 min-w-0">
-              <span className="text-sm sm:text-base font-black text-white truncate text-right">
+              <span className="text-base sm:text-lg font-black text-white truncate text-right">
                 {match.homeTeam}
               </span>
-              <TeamCrest teamName={match.homeTeam} />
+              <TeamCrest teamName={match.homeTeam} size="md" />
             </div>
 
             {/* Score / VS capsule */}
             <div className="shrink-0 flex items-center justify-center">
               {match.status === "LIVE" || match.status === "FINISHED" ? (
-                <div className="flex items-center gap-2.5 bg-black/40 border border-white/10 px-4.5 py-1.5 rounded-xl font-mono text-base sm:text-lg font-black text-white shadow-inner">
+                <div className="flex items-center gap-3 bg-black/40 border border-white/10 px-5 py-2 rounded-xl font-mono text-lg sm:text-xl font-black text-white shadow-inner">
                   <span>{match.homeScore}</span>
                   <span className="text-white/40 font-normal">:</span>
                   <span>{match.awayScore}</span>
                 </div>
               ) : (
-                <div className="bg-black/30 border border-white/5 px-3 py-1 rounded-xl text-[10px] font-black text-white uppercase tracking-widest">
+                <div className="bg-black/30 border border-white/10 px-4 py-1.5 rounded-xl text-xs font-black text-white uppercase tracking-widest">
                   VS
                 </div>
               )}
@@ -180,26 +180,26 @@ function MatchCenterBanner({ match, countdownValues }) {
 
             {/* Away team */}
             <div className="flex items-center gap-3 justify-start flex-1 min-w-0">
-              <TeamCrest teamName={match.awayTeam} />
-              <span className="text-sm sm:text-base font-black text-white truncate text-left">
+              <TeamCrest teamName={match.awayTeam} size="md" />
+              <span className="text-base sm:text-lg font-black text-white truncate text-left">
                 {match.awayTeam}
               </span>
             </div>
           </div>
 
           {/* Status / Countdown segment */}
-          <div className="shrink-0 flex items-center gap-2 md:absolute md:right-5">
+          <div className="shrink-0 flex items-center gap-2 md:absolute md:right-8">
             {match.status === "SCHEDULED" && countdownValues ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <span className="text-[9px] font-black text-white/60 tracking-wider">KICKOFF IN:</span>
-                <div className="flex items-center gap-1.5 bg-black/40 px-2.5 py-1 rounded-lg border border-white/10 font-mono text-xs font-bold text-white">
+                <div className="flex items-center gap-1.5 bg-black/40 px-3 py-1.5 rounded-lg border border-white/10 font-mono text-xs font-bold text-white">
                   <span>{countdownValues.days}d</span>
                   <span>{countdownValues.hours}h</span>
                   <span>{countdownValues.minutes}m</span>
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-full border border-white/10 text-xs font-bold text-white">
+              <div className="flex items-center gap-2 bg-black/40 px-3.5 py-1.5 rounded-full border border-white/10 text-xs font-bold text-white">
                 <span className={`w-1.5 h-1.5 rounded-full ${match.status === "LIVE" ? "bg-red-500 animate-pulse" : "bg-white/40"}`}></span>
                 <span>{match.status === "LIVE" ? "LIVE" : "FT"}</span>
                 {match.matchTime && <span className="text-white/60 border-l border-white/20 pl-1.5">{match.matchTime}</span>}
