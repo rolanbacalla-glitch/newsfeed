@@ -6,19 +6,17 @@ export const dynamic = "force-dynamic";
 // These 12 sources are fetched in parallel alongside Google News.
 // Each has a confirmed native RSS feed. If any single feed fails, the rest
 // continue — the app degrades gracefully.
-const DIRECT_LFC_FEEDS = [
-  { name: "Liverpool Echo",     url: "https://www.liverpoolecho.co.uk/all-about/liverpool-fc?service=rss" },
+const RSS_FEEDS = [
+  { name: "Liverpool FC",       url: "https://backend.liverpoolfc.com/rss.xml" },
   { name: "This Is Anfield",    url: "https://www.thisisanfield.com/feed/" },
-  { name: "Empire of the Kop",  url: "https://empireofthekop.com/feed/" },
-  { name: "The Guardian",       url: "https://www.theguardian.com/football/liverpool/rss" },
-  { name: "Liverpool.com",      url: "https://www.liverpool.com/liverpool-fc-news/?service=rss" },
+  { name: "The Anfield Wrap",   url: "https://www.theanfieldwrap.com/feed/" },
   { name: "Anfield Watch",      url: "https://anfieldwatch.co.uk/feed/" },
   { name: "Anfield Online",     url: "https://anfield-online.co.uk/feed/" },
-  { name: "The Anfield Wrap",   url: "https://www.theanfieldwrap.com/feed/" },
-  { name: "Tribal Football",    url: "https://www.tribalfootball.com/rss/clubs/liverpool-fc" },
-  { name: "Liverpool Offside",  url: "https://liverpooloffside.sbnation.com/rss/index.xml" },
-  { name: "Football365",        url: "https://www.football365.com/feed" },
+  { name: "Empire of the Kop",  url: "https://empireofthekop.com/feed/" },
+  { name: "Liverpool Offside",  url: "https://liverpooloffside.sbnation.com/rss/current.xml" },
+  { name: "Sky Sports",         url: "https://www.skysports.com/rss/12040" },
   { name: "Caught Offside",     url: "https://www.caughtoffside.com/category/liverpool/feed/" },
+  { name: "Google News LFC",    url: "https://news.google.com/rss/search?q=Liverpool%20FC&hl=en-GB&gl=GB&ceid=GB:en" },
 ];
 
 // ─── Stop Words ───────────────────────────────────────────────────────────────
@@ -271,6 +269,12 @@ async function fetchFeed(feedUrl, sourceName, parser) {
 
         if (imageUrl) {
           if (imageUrl.startsWith("//")) imageUrl = "https:" + imageUrl;
+          else if (imageUrl.startsWith("/")) {
+            try {
+              const base = new URL(feedUrl);
+              imageUrl = base.origin + imageUrl;
+            } catch {}
+          }
           imageUrl = decodeHtmlEntities(imageUrl);
         }
 
@@ -307,7 +311,7 @@ export async function GET(request) {
     const googleFeed = { name: "_google", url: googleNewsUrl };
 
     const feedsToFetch = isLfcTopic
-      ? [...DIRECT_LFC_FEEDS, googleFeed]
+      ? RSS_FEEDS
       : [googleFeed];
 
     // ── 2. Fetch all feeds in parallel ────────────────────────────────────────
