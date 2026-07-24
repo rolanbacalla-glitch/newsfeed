@@ -115,6 +115,33 @@ function getOverlapCount(title1, title2) {
   return overlap;
 }
 
+// ─── Utility: fetch OpenGraph image from original article page ──────────────
+async function fetchOgImage(url) {
+  if (!url || !url.startsWith("http") || url.includes("news.google.com/rss/articles")) return null;
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": USER_AGENT },
+      cache: "no-store",
+      signal: AbortSignal.timeout(3500),
+    });
+    if (!res.ok) return null;
+    const html = await res.text();
+    const match =
+      html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i) ||
+      html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i);
+    if (match && match[1]) {
+      let img = decodeHtmlEntities(match[1].trim());
+      if (img.startsWith("//")) img = "https:" + img;
+      return img;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 // ─── Utility: fetch + parse a single RSS feed ─────────────────────────────────
 // Returns an array of normalised article objects, or [] on failure.
 async function fetchFeed(feedUrl, sourceName, parser) {
@@ -139,11 +166,90 @@ async function fetchFeed(feedUrl, sourceName, parser) {
       jsonObj.feed?.entry ||
       [];
 
+    const getUrlFromObj = (obj) => {
+      if (!obj) return null;
+      if (typeof obj === "string") return obj;
+      return obj["@_url"] || obj.url || obj["@_href"] || obj.href || null;
+    };
+
     const normalised = (Array.isArray(items) ? items : [items])
       .filter(Boolean)
       .map((item) => {
         const rawTitle = (item.title?.["#text"] ?? item.title ?? "").toString().trim();
         const rawDesc = (item.description ?? item.summary?.["#text"] ?? item.summary ?? item.content?.["#text"] ?? item.content ?? "").toString();
+
+        let imageUrl = null;
+
+        // 1. Check media:content
+        if (item["media:content"]) {
+          const mc = Array.isArray(item["media:content"]) ? item["media:content"] : [item["media:content"]];
+          for (const m of mc) {
+            const url = getUrlFromObj(m);
+            if (url && (url.startsWith("http") || url.startsWith("//"))) {
+              imageUrl = url;
+              break;
+            }
+          }
+        }
+        // 2. Check media:thumbnail
+        if (!imageUrl && item["media:thumbnail"]) {
+          const mt = Array.isArray(item["media:thumbnail"]) ? item["media:thumbnail"] : [item["media:thumbnail"]];
+          for (const m of mt) {
+            const url = getUrlFromObj(m);
+            if (url && (url.startsWith("http") || url.startsWith("//"))) {
+              imageUrl = url;
+              break;
+            }
+          }
+        }
+        // 3. Check media:group
+        if (!imageUrl && item["media:group"]) {
+          const mg = item["media:group"];
+          const mc = mg["media:content"] || mg["media:thumbnail"];
+          if (mc) {
+            const arr = Array.isArray(mc) ? mc : [mc];
+            for (const m of arr) {
+              const url = getUrlFromObj(m);
+              if (url) { imageUrl = url; break; }
+            }
+          }
+        }
+        // 4. Check enclosure
+        if (!imageUrl && item["enclosure"]) {
+          const encs = Array.isArray(item["enclosure"]) ? item["enclosure"] : [item["enclosure"]];
+          for (const enc of encs) {
+            const url = getUrlFromObj(enc);
+            const type = enc["@_type"] || enc.type || "";
+            if (url && (type.startsWith("image/") || url.match(/\.(jpeg|jpg|png|webp|gif)/i))) {
+              imageUrl = url;
+              break;
+            }
+          }
+        }
+
+        // 5. Parse <img> from HTML contents
+        if (!imageUrl) {
+          const htmlSources = [
+            item["content:encoded"],
+            item.content?.["#text"] ?? item.content,
+            item.description?.["#text"] ?? item.description,
+            item.summary?.["#text"] ?? item.summary,
+          ];
+
+          for (const str of htmlSources) {
+            if (!str || typeof str !== "string") continue;
+            const imgMatch = str.match(/<img[^>]+src=["']([^"']+)["']/i);
+            if (imgMatch && imgMatch[1]) {
+              imageUrl = imgMatch[1];
+              break;
+            }
+          }
+        }
+
+        if (imageUrl) {
+          if (imageUrl.startsWith("//")) imageUrl = "https:" + imageUrl;
+          imageUrl = decodeHtmlEntities(imageUrl);
+        }
 
         return {
           title:        decodeHtmlEntities(rawTitle),
@@ -151,6 +257,7 @@ async function fetchFeed(feedUrl, sourceName, parser) {
           url:          item.link?.["@_href"] ?? item.link ?? item.guid ?? "",
           published_at: item.pubDate ?? item.updated ?? item.published ?? new Date().toISOString(),
           description:  decodeHtmlEntities(rawDesc),
+          imageUrl:     imageUrl,
         };
       })
       .filter((a) => a.title); // drop items with no title
@@ -171,9 +278,6 @@ export async function GET(request) {
 
   try {
     // ── 1. Build the full list of feeds to fetch ──────────────────────────────
-    // For the "Liverpool FC" topic we use the curated direct feeds PLUS Google News.
-    // For other topics (Premier League, Champions League) we fall back to Google News only,
-    // since the direct feeds are LFC-specific.
     const isLfcTopic = topic.toLowerCase().includes("liverpool");
 
     const googleNewsUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(topic)}&hl=en-GB&gl=GB&ceid=GB:en`;
@@ -198,7 +302,6 @@ export async function GET(request) {
 
       articles.forEach((article) => {
         if (feedName === "_google") {
-          // Google News bakes "Headline - Source" into the title
           const rawTitle = article.title;
           const lastDashIdx = rawTitle.lastIndexOf(" - ");
           if (lastDashIdx !== -1) {
@@ -211,13 +314,12 @@ export async function GET(request) {
             allArticles.push({ ...article, source: "Google News" });
           }
         } else {
-          // Direct feed — source is already set from the config
           allArticles.push(article);
         }
       });
     });
 
-    // ── 4. Deduplicate by URL (direct feeds & Google may overlap) ─────────────
+    // ── 4. Deduplicate by URL ─────────────────────────────────────────────────
     const seenUrls = new Set();
     const dedupedArticles = allArticles.filter((a) => {
       const key = a.url || a.title;
@@ -246,6 +348,9 @@ export async function GET(request) {
       }
 
       if (matchedCluster) {
+        if (!matchedCluster.imageUrl && article.imageUrl) {
+          matchedCluster.imageUrl = article.imageUrl;
+        }
         const alreadyListed =
           matchedCluster.secondary_sources.some((s) => s.name === article.source) ||
           matchedCluster.primary_source.name === article.source;
@@ -266,6 +371,7 @@ export async function GET(request) {
           category,
           sub_topic: topic,
           summary:   cleanSummary(article.description, article.title),
+          imageUrl:  article.imageUrl || null,
           primary_source: {
             name:         article.source,
             url:          article.url,
@@ -279,7 +385,19 @@ export async function GET(request) {
       }
     }
 
-    // ── 6. Sort by most recent primary source ─────────────────────────────────
+    // ── 6. Enrich top clusters missing real images via live og:image fetch ───
+    await Promise.all(
+      clusters.slice(0, 15).map(async (cluster) => {
+        if (!cluster.imageUrl || cluster.imageUrl.includes("googleusercontent.com") || cluster.imageUrl.includes("gstatic.com")) {
+          const ogImg = await fetchOgImage(cluster.primary_source.url);
+          if (ogImg) {
+            cluster.imageUrl = ogImg;
+          }
+        }
+      })
+    );
+
+    // ── 7. Sort by most recent primary source ─────────────────────────────────
     clusters.sort(
       (a, b) =>
         new Date(b.primary_source.published_at).getTime() -

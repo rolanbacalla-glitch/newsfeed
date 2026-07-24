@@ -255,17 +255,34 @@ a {
   border-top: 1px solid var(--border-color);
 }
 
-/* Hot (hero) card — MD3: 28px padding, 20px between sections */
+/* Hot (hero) card — MD3 with left thumbnail layout */
 .card-hot {
-  padding: 1.75rem;        /* 28px — hero cards get more breathing room */
+  padding: 0 !important;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;             /* 24px between sections — MD3 xl */
 }
 
 @media (min-width: 768px) {
   .card-hot {
-    padding: 2.25rem;      /* 36px on md+ — generous hero breathing room */
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+  }
+}
+
+.card-hot-content {
+  flex: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .card-hot-content {
+    padding: 1.5em 1.75em 1.5em 1em; /* 1em spacing from image */
+    gap: 1.25rem;
   }
 }
 
@@ -275,7 +292,7 @@ a {
   justify-content: space-between;
   gap: 1rem;
   margin-top: 0.25rem;
-  padding-top: 1.25rem;    /* 20px — MD3 section divider */
+  padding-top: 1rem;
   border-top: 1px solid var(--border-color);
 }
 
