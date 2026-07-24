@@ -115,27 +115,50 @@ function getOverlapCount(title1, title2) {
   return overlap;
 }
 
-// ─── Utility: fetch OpenGraph image from original article page ──────────────
+// ─── Utility: fetch OpenGraph or article body image from original article page
 async function fetchOgImage(url) {
-  if (!url || !url.startsWith("http") || url.includes("news.google.com/rss/articles")) return null;
+  if (!url || !url.startsWith("http")) return null;
   try {
     const res = await fetch(url, {
       headers: { "User-Agent": USER_AGENT },
       cache: "no-store",
+      redirect: "follow",
       signal: AbortSignal.timeout(3500),
     });
     if (!res.ok) return null;
     const html = await res.text();
-    const match =
+
+    // 1. Meta tags: og:image, twitter:image, image_src
+    const metaMatch =
       html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
       html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i) ||
       html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i) ||
-      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i);
-    if (match && match[1]) {
-      let img = decodeHtmlEntities(match[1].trim());
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i) ||
+      html.match(/<link[^>]+rel=["']image_src["'][^>]+href=["']([^"']+)["']/i);
+
+    if (metaMatch && metaMatch[1]) {
+      let img = decodeHtmlEntities(metaMatch[1].trim());
       if (img.startsWith("//")) img = "https:" + img;
-      return img;
+      if (img.startsWith("http") && !img.includes("googleusercontent.com") && !img.includes("gstatic.com")) {
+        return img;
+      }
     }
+
+    // 2. In-body article / main / figure / featured img tags
+    const imgMatch =
+      html.match(/<article[^>]*>[\s\S]*?<img[^>]+src=["']([^"']+)["']/i) ||
+      html.match(/<main[^>]*>[\s\S]*?<img[^>]+src=["']([^"']+)["']/i) ||
+      html.match(/<figure[^>]*>[\s\S]*?<img[^>]+src=["']([^"']+)["']/i) ||
+      html.match(/<img[^>]+class=["'][^"']*(?:featured|hero|lead|article|header|post)[^"']*["'][^>]+src=["']([^"']+)["']/i);
+
+    if (imgMatch && imgMatch[1]) {
+      let img = decodeHtmlEntities(imgMatch[1].trim());
+      if (img.startsWith("//")) img = "https:" + img;
+      if (img.startsWith("http") && !img.match(/\.(gif|svg)$/i) && !img.includes("pixel") && !img.includes("avatar")) {
+        return img;
+      }
+    }
+
     return null;
   } catch {
     return null;
@@ -385,17 +408,27 @@ export async function GET(request) {
       }
     }
 
-    // ── 6. Enrich top clusters missing real images via live og:image fetch ───
-    await Promise.all(
-      clusters.slice(0, 15).map(async (cluster) => {
-        if (!cluster.imageUrl || cluster.imageUrl.includes("googleusercontent.com") || cluster.imageUrl.includes("gstatic.com")) {
-          const ogImg = await fetchOgImage(cluster.primary_source.url);
-          if (ogImg) {
-            cluster.imageUrl = ogImg;
+    // ── 6. Enrich all clusters missing real images via live og/body image fetch ─
+    const batchSize = 15;
+    for (let i = 0; i < clusters.length; i += batchSize) {
+      const batch = clusters.slice(i, i + batchSize);
+      await Promise.all(
+        batch.map(async (cluster) => {
+          if (!cluster.imageUrl || cluster.imageUrl.includes("googleusercontent.com") || cluster.imageUrl.includes("gstatic.com")) {
+            let ogImg = await fetchOgImage(cluster.primary_source.url);
+            if (!ogImg && cluster.secondary_sources && cluster.secondary_sources.length > 0) {
+              for (const sec of cluster.secondary_sources) {
+                ogImg = await fetchOgImage(sec.url);
+                if (ogImg) break;
+              }
+            }
+            if (ogImg) {
+              cluster.imageUrl = ogImg;
+            }
           }
-        }
-      })
-    );
+        })
+      );
+    }
 
     // ── 7. Sort by most recent primary source ─────────────────────────────────
     clusters.sort(
