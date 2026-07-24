@@ -624,7 +624,7 @@ export default function Home() {
                 <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                   {/* Section label */}
                   <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                    <span className="font-heading text-xs font-black uppercase tracking-widest text-accent" style={{ flexShrink: 0 }}>
+                    <span className="font-heading text-xs font-black uppercase tracking-widest text-accent mt-6" style={{ flexShrink: 0 }}>
                       🔥 Hot Coverage
                     </span>
                     <div style={{ height: "1px", background: "var(--border-color)", flex: 1 }}></div>
@@ -643,7 +643,7 @@ export default function Home() {
                 <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                   {/* Section label */}
                   <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                    <span className="font-heading text-xs font-black uppercase tracking-widest text-accent" style={{ flexShrink: 0 }}>
+                    <span className="font-heading text-xs font-black uppercase tracking-widest text-accent mt-6" style={{ flexShrink: 0 }}>
                       🕒 LFC Timeline Stream
                     </span>
                     <div style={{ height: "1px", background: "var(--border-color)", flex: 1 }}></div>
