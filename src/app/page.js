@@ -386,7 +386,7 @@ export default function Home() {
               <div className="flex flex-wrap items-center gap-3 shrink-0 justify-center md:justify-start">
                 <span
                   className="rounded-full text-[9px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/15 shadow-inner inline-flex items-center justify-center whitespace-nowrap leading-none shrink-0"
-                  style={{ padding: "6px 20px" }}
+                  style={{ padding: "10px" }}
                 >
                   {match.competition}
                 </span>
