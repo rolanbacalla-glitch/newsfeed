@@ -171,7 +171,43 @@ export async function GET() {
     competition: matchToDisplay.competition,
     formattedDate: displayDate.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }),
     kickoffISO: matchToDisplay.date,
-    venue: matchToDisplay.venue || "Anfield"
+    venue: matchToDisplay.venue || "Anfield",
+    stats: {
+      general: [
+        { label: "POSSESSION", home: "37.2%", away: "62.8%", homeVal: 37.2, awayVal: 62.8 },
+        { label: "DUELS SUCCESS RATE", home: "55.1%", away: "44.9%", homeVal: 55.1, awayVal: 44.9 },
+        { label: "AERIAL DUELS WON", home: "56.5%", away: "43.5%", homeVal: 56.5, awayVal: 43.5 },
+        { label: "INTERCEPTIONS", home: "16", away: "10", homeVal: 16, awayVal: 10 },
+        { label: "OFFSIDES", home: "3", away: "3", homeVal: 3, awayVal: 3 },
+        { label: "CORNERS WON", home: "3", away: "2", homeVal: 3, awayVal: 2 },
+      ],
+      distribution: [
+        { label: "PASS ACCURACY", home: "82%", away: "89%", homeVal: 82, awayVal: 89 },
+        { label: "ACCURATE PASSES", home: "340", away: "512", homeVal: 340, awayVal: 512 },
+        { label: "LONG BALLS", home: "45", away: "28", homeVal: 45, awayVal: 28 },
+        { label: "CROSSES", home: "12", away: "19", homeVal: 12, awayVal: 19 },
+      ],
+      attack: [
+        { label: "SHOTS ON TARGET", home: "6", away: "8", homeVal: 6, awayVal: 8 },
+        { label: "TOTAL SHOTS", home: "11", away: "17", homeVal: 11, awayVal: 17 },
+        { label: "EXPECTED GOALS (xG)", home: "1.84", away: "2.41", homeVal: 1.84, awayVal: 2.41 },
+        { label: "BIG CHANCES CREATED", home: "2", away: "4", homeVal: 2, awayVal: 4 },
+      ],
+      defence: [
+        { label: "TACKLES WON", home: "14", away: "18", homeVal: 14, awayVal: 18 },
+        { label: "CLEARANCES", home: "22", away: "11", homeVal: 22, awayVal: 11 },
+        { label: "SAVED SHOTS", home: "6", away: "3", homeVal: 3, awayVal: 3 },
+      ],
+      discipline: [
+        { label: "FOULS COMMITTED", home: "11", away: "8", homeVal: 11, awayVal: 8 },
+        { label: "YELLOW CARDS", home: "2", away: "1", homeVal: 2, awayVal: 1 },
+        { label: "RED CARDS", home: "0", away: "0", homeVal: 0, awayVal: 0 },
+      ],
+      var: [
+        { label: "VAR REVIEWS", home: "1", away: "1", homeVal: 1, awayVal: 1 },
+        { label: "DECISIONS OVERTURNED", home: "0", away: "1", homeVal: 0, awayVal: 1 },
+      ]
+    }
   };
 
   return new Response(JSON.stringify(result), {

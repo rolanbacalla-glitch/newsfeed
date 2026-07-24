@@ -87,6 +87,205 @@ const formatKickoffDate = (isoString) => {
   }
 };
 
+function MatchCenterBanner({ match, countdownValues }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [activeTab, setActiveTab] = useState("general");
+
+  // Auto-expand stats dashboard if match is LIVE
+  useEffect(() => {
+    if (match?.status === "LIVE") {
+      setIsExpanded(true);
+    }
+  }, [match?.status]);
+
+  if (!match) return null;
+
+  const currentStats = match.stats?.[activeTab] || match.stats?.general || [];
+  const tabs = [
+    { id: "general", label: "GENERAL" },
+    { id: "distribution", label: "DISTRIBUTION" },
+    { id: "attack", label: "ATTACK" },
+    { id: "defence", label: "DEFENCE" },
+    { id: "discipline", label: "DISCIPLINE" },
+    { id: "var", label: "VAR" },
+  ];
+
+  return (
+    <div className="relative w-full bg-gradient-to-r from-red-600/90 via-red-700/90 to-red-800/90 dark:from-red-950/85 dark:via-red-900/85 dark:to-neutral-950/90 backdrop-blur-md rounded-2xl border border-red-500/20 overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/10 mb-8">
+      {/* Banner Header Bar with Toggle */}
+      <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 border-b border-white/10 bg-black/25">
+        <div className="flex items-center gap-3">
+          <span
+            className="rounded-full text-[9px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/15 shadow-inner inline-flex items-center justify-center whitespace-nowrap leading-none shrink-0"
+            style={{ padding: "8px 14px" }}
+          >
+            {match.competition}
+          </span>
+          <span className="text-[10px] text-red-100 dark:text-red-300 font-bold uppercase tracking-wider hidden sm:inline">
+            {formatKickoffDate(match.kickoffISO)}
+          </span>
+          {match.status === "LIVE" && (
+            <span className="flex items-center gap-1.5 bg-red-600 text-white text-[9px] font-black uppercase px-2.5 py-1 rounded-full animate-pulse shadow-md">
+              <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+              LIVE • {match.matchTime}
+            </span>
+          )}
+        </div>
+
+        {/* Sleek Toggle Button: [ Compact Score ] / [ Expand Stats ] */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-200 border border-white/20 text-white text-[10px] font-extrabold uppercase tracking-wider shadow-sm cursor-pointer"
+        >
+          <span>{isExpanded ? "Compact Score" : "Expand Stats"}</span>
+          <svg
+            className={`w-3.5 h-3.5 transition-transform duration-300 ${isExpanded ? "rotate-180" : "rotate-0"}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={3}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      </div>
+
+      {/* COMPACT VIEW (Design 1 Header Ticker) */}
+      {!isExpanded ? (
+        <div className="p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+          {/* Teams & Scoreboard horizontal ticker */}
+          <div className="flex items-center gap-4 sm:gap-6 flex-1 justify-center max-w-xl w-full">
+            {/* Home team */}
+            <div className="flex items-center gap-3 justify-end flex-1 min-w-0">
+              <span className="text-sm sm:text-base font-black text-white truncate text-right">
+                {match.homeTeam}
+              </span>
+              <TeamCrest teamName={match.homeTeam} />
+            </div>
+
+            {/* Score / VS capsule */}
+            <div className="shrink-0 flex items-center justify-center">
+              {match.status === "LIVE" || match.status === "FINISHED" ? (
+                <div className="flex items-center gap-2.5 bg-black/40 border border-white/10 px-4.5 py-1.5 rounded-xl font-mono text-base sm:text-lg font-black text-white shadow-inner">
+                  <span>{match.homeScore}</span>
+                  <span className="text-white/40 font-normal">:</span>
+                  <span>{match.awayScore}</span>
+                </div>
+              ) : (
+                <div className="bg-black/30 border border-white/5 px-3 py-1 rounded-xl text-[10px] font-black text-white uppercase tracking-widest">
+                  VS
+                </div>
+              )}
+            </div>
+
+            {/* Away team */}
+            <div className="flex items-center gap-3 justify-start flex-1 min-w-0">
+              <TeamCrest teamName={match.awayTeam} />
+              <span className="text-sm sm:text-base font-black text-white truncate text-left">
+                {match.awayTeam}
+              </span>
+            </div>
+          </div>
+
+          {/* Status / Countdown segment */}
+          <div className="shrink-0 flex items-center gap-2">
+            {match.status === "SCHEDULED" && countdownValues ? (
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] font-black text-white/60 tracking-wider">KICKOFF IN:</span>
+                <div className="flex items-center gap-1.5 bg-black/40 px-2.5 py-1 rounded-lg border border-white/10 font-mono text-xs font-bold text-white">
+                  <span>{countdownValues.days}d</span>
+                  <span>{countdownValues.hours}h</span>
+                  <span>{countdownValues.minutes}m</span>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-full border border-white/10 text-xs font-bold text-white">
+                <span className={`w-1.5 h-1.5 rounded-full ${match.status === "LIVE" ? "bg-red-500 animate-pulse" : "bg-white/40"}`}></span>
+                <span>{match.status === "LIVE" ? "LIVE" : "FT"}</span>
+                {match.matchTime && <span className="text-white/60 border-l border-white/20 pl-1.5">{match.matchTime}</span>}
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        /* EXPANDED MATCH STATS DASHBOARD (Design 2) */
+        <div className="p-5 md:p-6 flex flex-col gap-5">
+          {/* Top Scoreboard Section */}
+          <div className="flex items-center justify-between gap-4 max-w-3xl mx-auto w-full bg-black/30 p-3.5 rounded-2xl border border-white/10 shadow-lg">
+            {/* Home Crest & Name */}
+            <div className="flex items-center gap-3 flex-1 justify-end">
+              <span className="text-sm md:text-base font-black text-white text-right truncate">
+                {match.homeTeam}
+              </span>
+              <TeamCrest teamName={match.homeTeam} />
+            </div>
+
+            {/* Live Score Display */}
+            <div className="flex items-center gap-2.5 bg-neutral-900/90 px-4 py-1.5 rounded-xl border border-white/15 shadow-2xl">
+              <span className="font-mono text-xl md:text-2xl font-black text-white">{match.homeScore}</span>
+              <span className="text-white/30 text-lg font-light">-</span>
+              <span className="font-mono text-xl md:text-2xl font-black text-white">{match.awayScore}</span>
+            </div>
+
+            {/* Away Crest & Name */}
+            <div className="flex items-center gap-3 flex-1 justify-start">
+              <TeamCrest teamName={match.awayTeam} />
+              <span className="text-sm md:text-base font-black text-white text-left truncate">
+                {match.awayTeam}
+              </span>
+            </div>
+          </div>
+
+          {/* Interactive Category Tabs: GENERAL, DISTRIBUTION, ATTACK, DEFENCE, DISCIPLINE, VAR */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar justify-start md:justify-center border-b border-white/10">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                  activeTab === tab.id
+                    ? "bg-red-600 text-white shadow-md shadow-red-900/40"
+                    : "bg-white/5 text-white/70 hover:bg-white/15 hover:text-white"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Real-time Match Statistics Comparison Bars */}
+          <div className="flex flex-col gap-3 max-w-2xl mx-auto w-full pt-1">
+            {currentStats.map((st, i) => (
+              <div key={i} className="flex flex-col gap-1">
+                {/* Numbers and Label */}
+                <div className="flex items-center justify-between text-xs font-bold">
+                  <span className="font-mono text-white font-black text-sm w-16 text-left">{st.home}</span>
+                  <span className="text-[10px] uppercase font-black tracking-wider text-red-100/90 dark:text-red-200/90 text-center flex-1 truncate px-2">
+                    {st.label}
+                  </span>
+                  <span className="font-mono text-white font-black text-sm w-16 text-right">{st.away}</span>
+                </div>
+
+                {/* Split Dual-Color Progress Bar */}
+                <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden flex items-center p-0.5 border border-white/10">
+                  <div
+                    className="h-full bg-red-500 rounded-l-full transition-all duration-500"
+                    style={{ width: `${(st.homeVal / (st.homeVal + st.awayVal || 1)) * 100}%` }}
+                  />
+                  <div
+                    className="h-full bg-zinc-900/90 rounded-r-full transition-all duration-500"
+                    style={{ width: `${(st.awayVal / (st.homeVal + st.awayVal || 1)) * 100}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Home() {
   const [activeTopic, setActiveTopic] = useState("all");
   const [activeCategory, setActiveCategory] = useState("All");
@@ -375,90 +574,8 @@ export default function Home() {
             )}
           </div>
 
-          {/* Broadcast Scoreboard Banner */}
-          {match && (
-            <div
-              className="relative w-full bg-gradient-to-r from-red-600/90 via-red-700/90 to-red-800/90 dark:from-red-950/80 dark:via-red-900/80 dark:to-neutral-950/80 backdrop-blur-md rounded-2xl border border-red-500/20 overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-red-500/10 flex flex-col md:flex-row items-center justify-between"
-              style={{ padding: "1.25rem 1.75rem", gap: "1.25rem", marginBottom: "2rem" }}
-            >
-
-              {/* Competition Label */}
-              <div className="flex flex-wrap items-center gap-3 shrink-0 justify-center md:justify-start">
-                <span
-                  className="rounded-full text-[9px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/15 shadow-inner inline-flex items-center justify-center whitespace-nowrap leading-none shrink-0"
-                  style={{ padding: "10px" }}
-                >
-                  {match.competition}
-                </span>
-                <span className="text-[10px] text-red-100 dark:text-red-300 font-bold uppercase tracking-wider">
-                  {formatKickoffDate(match.kickoffISO)}
-                </span>
-                {match.venue && (
-                  <span className="text-[10px] text-white/80 font-bold uppercase tracking-wider flex items-center gap-1">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" opacity="0.8">
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                    </svg>
-                    {match.venue}
-                  </span>
-                )}
-              </div>
-
-              {/* Teams & Scoreboard horizontal ticker */}
-              <div className="flex items-center gap-4 sm:gap-6 flex-1 justify-center max-w-xl w-full">
-                {/* Home team */}
-                <div className="flex items-center gap-3 justify-end flex-1 min-w-0">
-                  <span className="text-sm sm:text-base font-black text-white truncate text-right">
-                    {match.homeTeam}
-                  </span>
-                  <TeamCrest teamName={match.homeTeam} />
-                </div>
-
-                {/* Score / VS capsule */}
-                <div className="shrink-0 flex items-center justify-center">
-                  {(match.status === "LIVE" || match.status === "FINISHED") ? (
-                    <div className="flex items-center gap-2.5 bg-black/40 border border-white/10 px-4.5 py-1.5 rounded-xl font-mono text-base sm:text-lg font-black text-white shadow-inner">
-                      <span>{match.homeScore}</span>
-                      <span className="text-white/40 font-normal">:</span>
-                      <span>{match.awayScore}</span>
-                    </div>
-                  ) : (
-                    <div className="bg-black/30 border border-white/5 px-3 py-1 rounded-xl text-[10px] font-black text-white uppercase tracking-widest">
-                      VS
-                    </div>
-                  )}
-                </div>
-
-                {/* Away team */}
-                <div className="flex items-center gap-3 justify-start flex-1 min-w-0">
-                  <TeamCrest teamName={match.awayTeam} />
-                  <span className="text-sm sm:text-base font-black text-white truncate text-left">
-                    {match.awayTeam}
-                  </span>
-                </div>
-              </div>
-
-              {/* Status / Countdown segment */}
-              <div className="shrink-0 flex items-center gap-2">
-                {match.status === "SCHEDULED" && countdownValues ? (
-                  <div className="flex items-center gap-2">
-                    <span className="text-[9px] font-black text-white/60 tracking-wider">KICKOFF IN:</span>
-                    <div className="flex items-center gap-1.5 bg-black/40 px-2.5 py-1 rounded-lg border border-white/10 font-mono text-xs font-bold text-white">
-                      <span>{countdownValues.days}d</span>
-                      <span>{countdownValues.hours}h</span>
-                      <span>{countdownValues.minutes}m</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-full border border-white/10 text-xs font-bold text-white">
-                    <span className={`w-1.5 h-1.5 rounded-full ${match.status === "LIVE" ? "bg-red-500 animate-pulse" : "bg-white/40"}`}></span>
-                    <span>{match.status === "LIVE" ? "LIVE" : "FT"}</span>
-                    {match.matchTime && <span className="text-white/60 border-l border-white/20 pl-1.5">{match.matchTime}</span>}
-                  </div>
-                )}
-              </div>
-
-            </div>
-          )}
+          {/* Broadcast Scoreboard Banner with Expand/Collapse Match Center */}
+          <MatchCenterBanner match={match} countdownValues={countdownValues} />
 
           {/* Feed Content rendering states */}
           {loading ? (
