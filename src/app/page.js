@@ -111,7 +111,7 @@ function MatchCenterBanner({ match, countdownValues }) {
   ];
 
   return (
-    <div className="relative w-full bg-gradient-to-r from-red-600/90 via-red-700/90 to-red-800/90 dark:from-red-950/85 dark:via-red-900/85 dark:to-neutral-950/90 backdrop-blur-md rounded-2xl border border-red-500/20 overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/10 mb-14">
+    <div className="relative w-full bg-gradient-to-r from-red-600/90 via-red-700/90 to-red-800/90 dark:from-red-950/85 dark:via-red-900/85 dark:to-neutral-950/90 backdrop-blur-md rounded-2xl border border-red-500/20 overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/10 mb-20">
       {/* Banner Header Bar with Toggle */}
       <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 border-b border-white/10 bg-black/25">
         <div className="flex items-center gap-3">
@@ -623,8 +623,8 @@ export default function Home() {
               {hotCoverage.length > 0 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                   {/* Section label */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                    <span className="font-heading text-xs font-black uppercase tracking-widest text-accent mt-6" style={{ flexShrink: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginTop: "1rem" }}>
+                    <span className="font-heading text-xs font-black uppercase tracking-widest text-accent" style={{ flexShrink: 0 }}>
                       🔥 Hot Coverage
                     </span>
                     <div style={{ height: "1px", background: "var(--border-color)", flex: 1 }}></div>
@@ -642,8 +642,8 @@ export default function Home() {
               {standardFeed.length > 0 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                   {/* Section label */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                    <span className="font-heading text-xs font-black uppercase tracking-widest text-accent mt-6" style={{ flexShrink: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginTop: "1rem" }}>
+                    <span className="font-heading text-xs font-black uppercase tracking-widest text-accent" style={{ flexShrink: 0 }}>
                       🕒 LFC Timeline Stream
                     </span>
                     <div style={{ height: "1px", background: "var(--border-color)", flex: 1 }}></div>
