@@ -209,40 +209,57 @@ function MatchCenterBanner({ match, countdownValues }) {
         </div>
       ) : (
         /* EXPANDED MATCH STATS DASHBOARD (Design 2) */
-        <div className="p-5 md:p-6 flex flex-col gap-5">
-          {/* Top Scoreboard Section */}
-          <div className="flex items-center justify-between gap-4 max-w-3xl mx-auto w-full bg-black/30 p-3.5 rounded-2xl border border-white/10 shadow-lg">
-            {/* Home Crest & Name */}
-            <div className="flex items-center gap-3 flex-1 justify-end">
-              <span className="text-sm md:text-base font-black text-white text-right truncate">
-                {match.homeTeam}
+        <div className="p-5 md:p-8 flex flex-col items-center justify-center gap-6">
+          {/* Header Title: MATCH STATS */}
+          <div className="flex flex-col items-center text-center gap-1">
+            <h2 className="text-sm md:text-base font-black text-white uppercase tracking-widest">
+              MATCH STATS
+            </h2>
+          </div>
+
+          {/* Top Scoreboard Section matching Design 2 */}
+          <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-3 bg-black/20 p-5 rounded-2xl border border-white/10 shadow-lg">
+            <div className="w-full flex items-center justify-between gap-4">
+              {/* Home Crest */}
+              <div className="shrink-0">
+                <TeamCrest teamName={match.homeTeam} size="lg" />
+              </div>
+
+              {/* Centered Team Names & Score */}
+              <div className="flex items-center gap-3 font-heading font-black text-white text-base sm:text-xl justify-center flex-1">
+                <span className="truncate text-right max-w-[120px] sm:max-w-none">{match.homeTeam}</span>
+                <div className="flex items-center gap-2 bg-neutral-900/90 px-3.5 py-1.5 rounded-xl border border-white/15 shadow-inner">
+                  <span className="font-mono text-xl sm:text-2xl font-black text-white">{match.homeScore}</span>
+                  <span className="text-white/30 text-lg font-light">:</span>
+                  <span className="font-mono text-xl sm:text-2xl font-black text-white">{match.awayScore}</span>
+                </div>
+                <span className="truncate text-left max-w-[120px] sm:max-w-none">{match.awayTeam}</span>
+              </div>
+
+              {/* Away Crest */}
+              <div className="shrink-0">
+                <TeamCrest teamName={match.awayTeam} size="lg" />
+              </div>
+            </div>
+
+            {/* Competition & Date Centered Sub-header */}
+            <div className="flex flex-col items-center gap-0.5 text-center pt-1 border-t border-white/5 w-full">
+              <span className="text-[10px] font-black uppercase tracking-widest text-red-200/90 dark:text-red-300/90">
+                {match.competition}
               </span>
-              <TeamCrest teamName={match.homeTeam} />
-            </div>
-
-            {/* Live Score Display */}
-            <div className="flex items-center gap-2.5 bg-neutral-900/90 px-4 py-1.5 rounded-xl border border-white/15 shadow-2xl">
-              <span className="font-mono text-xl md:text-2xl font-black text-white">{match.homeScore}</span>
-              <span className="text-white/30 text-lg font-light">-</span>
-              <span className="font-mono text-xl md:text-2xl font-black text-white">{match.awayScore}</span>
-            </div>
-
-            {/* Away Crest & Name */}
-            <div className="flex items-center gap-3 flex-1 justify-start">
-              <TeamCrest teamName={match.awayTeam} />
-              <span className="text-sm md:text-base font-black text-white text-left truncate">
-                {match.awayTeam}
+              <span className="text-[9px] font-bold uppercase tracking-wider text-white/60">
+                {formatKickoffDate(match.kickoffISO)}
               </span>
             </div>
           </div>
 
-          {/* Interactive Category Tabs: GENERAL, DISTRIBUTION, ATTACK, DEFENCE, DISCIPLINE, VAR */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar justify-start md:justify-center border-b border-white/10">
+          {/* Interactive Category Tabs Centered: GENERAL, DISTRIBUTION, ATTACK, DEFENCE, DISCIPLINE, VAR */}
+          <div className="w-full max-w-2xl flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar justify-center border-b border-white/10">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all duration-200 whitespace-nowrap cursor-pointer ${
                   activeTab === tab.id
                     ? "bg-red-600 text-white shadow-md shadow-red-900/40"
                     : "bg-white/5 text-white/70 hover:bg-white/15 hover:text-white"
@@ -253,29 +270,32 @@ function MatchCenterBanner({ match, countdownValues }) {
             ))}
           </div>
 
-          {/* Real-time Match Statistics Comparison Bars */}
-          <div className="flex flex-col gap-3 max-w-2xl mx-auto w-full pt-1">
+          {/* Real-time Match Statistics Comparison Bars Centered */}
+          <div className="flex flex-col gap-4 max-w-2xl mx-auto w-full pt-1">
             {currentStats.map((st, i) => (
-              <div key={i} className="flex flex-col gap-1">
-                {/* Numbers and Label */}
-                <div className="flex items-center justify-between text-xs font-bold">
-                  <span className="font-mono text-white font-black text-sm w-16 text-left">{st.home}</span>
-                  <span className="text-[10px] uppercase font-black tracking-wider text-red-100/90 dark:text-red-200/90 text-center flex-1 truncate px-2">
-                    {st.label}
-                  </span>
-                  <span className="font-mono text-white font-black text-sm w-16 text-right">{st.away}</span>
-                </div>
+              <div key={i} className="flex flex-col items-center gap-1 w-full">
+                {/* Metric Label Centered */}
+                <span className="text-[10px] uppercase font-black tracking-widest text-white/90 text-center">
+                  {st.label}
+                </span>
 
-                {/* Split Dual-Color Progress Bar */}
-                <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden flex items-center p-0.5 border border-white/10">
-                  <div
-                    className="h-full bg-red-500 rounded-l-full transition-all duration-500"
-                    style={{ width: `${(st.homeVal / (st.homeVal + st.awayVal || 1)) * 100}%` }}
-                  />
-                  <div
-                    className="h-full bg-zinc-900/90 rounded-r-full transition-all duration-500"
-                    style={{ width: `${(st.awayVal / (st.homeVal + st.awayVal || 1)) * 100}%` }}
-                  />
+                {/* Progress Bar & Values Row */}
+                <div className="flex items-center gap-4 w-full">
+                  <span className="font-mono text-white font-black text-sm w-12 text-right shrink-0">{st.home}</span>
+                  
+                  {/* Split Dual-Color Progress Bar */}
+                  <div className="flex-1 h-3 bg-black/50 rounded-full overflow-hidden flex items-center p-0.5 border border-white/10 shadow-inner">
+                    <div
+                      className="h-full bg-red-500 rounded-l-full transition-all duration-500"
+                      style={{ width: `${(st.homeVal / (st.homeVal + st.awayVal || 1)) * 100}%` }}
+                    />
+                    <div
+                      className="h-full bg-zinc-900/90 rounded-r-full transition-all duration-500"
+                      style={{ width: `${(st.awayVal / (st.homeVal + st.awayVal || 1)) * 100}%` }}
+                    />
+                  </div>
+
+                  <span className="font-mono text-white font-black text-sm w-12 text-left shrink-0">{st.away}</span>
                 </div>
               </div>
             ))}
