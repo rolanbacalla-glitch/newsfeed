@@ -111,9 +111,12 @@ function MatchCenterBanner({ match, countdownValues }) {
   ];
 
   return (
-    <div className="relative w-full bg-gradient-to-r from-red-600/90 via-red-700/90 to-red-800/90 dark:from-red-950/85 dark:via-red-900/85 dark:to-neutral-950/90 backdrop-blur-md rounded-2xl border border-red-500/20 overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/10 mb-20">
+    <div
+      className="relative w-full bg-gradient-to-r from-red-600/90 via-red-700/90 to-red-800/90 dark:from-red-950/85 dark:via-red-900/85 dark:to-neutral-950/90 backdrop-blur-md rounded-2xl border border-red-500/20 overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/10 mb-20"
+      style={{ padding: "1em" }}
+    >
       {/* Banner Header Bar with Toggle */}
-      <div className="flex items-center justify-between px-6 sm:px-8 py-3.5 border-b border-white/10 bg-black/25">
+      <div className="flex items-center justify-between px-4 py-3.5 border-b border-white/10 bg-black/25 rounded-xl">
         <div className="flex items-center gap-4">
           <span
             className="rounded-full text-[9px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/15 shadow-inner inline-flex items-center justify-center whitespace-nowrap leading-none shrink-0"
@@ -152,7 +155,7 @@ function MatchCenterBanner({ match, countdownValues }) {
 
       {/* COMPACT VIEW (Design 1 Header Ticker with Generous Consistent Padding) */}
       {!isExpanded ? (
-        <div className="p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center justify-center gap-6 text-center relative">
+        <div className="p-4 sm:p-6 md:p-8 flex flex-col md:flex-row items-center justify-center gap-6 text-center relative" style={{ padding: "1em" }}>
           {/* Teams & Scoreboard horizontal ticker Centered */}
           <div className="flex items-center gap-4 sm:gap-8 justify-center max-w-2xl w-full mx-auto">
             {/* Home team */}
@@ -209,7 +212,7 @@ function MatchCenterBanner({ match, countdownValues }) {
         </div>
       ) : (
         /* EXPANDED MATCH STATS DASHBOARD (Design 2) */
-        <div className="p-5 md:p-8 flex flex-col items-center justify-center gap-6">
+        <div className="p-4 md:p-6 flex flex-col items-center justify-center gap-6" style={{ padding: "1em" }}>
           {/* Header Title: MATCH STATS */}
           <div className="flex flex-col items-center text-center gap-1">
             <h2 className="text-sm md:text-base font-black text-white uppercase tracking-widest">
@@ -218,7 +221,7 @@ function MatchCenterBanner({ match, countdownValues }) {
           </div>
 
           {/* Top Scoreboard Section matching Design 2 */}
-          <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-3 bg-black/20 p-5 rounded-2xl border border-white/10 shadow-lg">
+          <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-3 bg-black/20 rounded-2xl border border-white/10 shadow-lg" style={{ padding: "1em" }}>
             <div className="w-full flex items-center justify-between gap-4">
               {/* Home Crest */}
               <div className="shrink-0">
@@ -252,6 +255,12 @@ function MatchCenterBanner({ match, countdownValues }) {
               </span>
             </div>
           </div>
+
+          {match.status === "SCHEDULED" && (
+            <div className="w-full max-w-2xl bg-black/30 border border-white/10 px-4 py-2 rounded-xl text-center text-[10px] font-extrabold uppercase tracking-wider text-white/70">
+              Match Not Started — Stats Will Update Live at Kickoff
+            </div>
+          )}
 
           {/* Interactive Category Tabs Centered: GENERAL, DISTRIBUTION, ATTACK, DEFENCE, DISCIPLINE, VAR */}
           <div className="w-full max-w-2xl flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar justify-center border-b border-white/10">
