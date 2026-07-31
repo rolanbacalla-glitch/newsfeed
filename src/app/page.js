@@ -477,7 +477,7 @@ export default function Home() {
     setIsRefreshing(true);
     try {
       const queryTopic = activeTopic === "all" ? "Liverpool FC" : activeTopic;
-      const res = await fetch(`/api/news?topic=${encodeURIComponent(queryTopic)}`);
+      const res = await fetch(`/api/news?topic=${encodeURIComponent(queryTopic)}&refresh=true`);
       if (!res.ok) throw new Error(`Server error ${res.status}`);
       const data = await res.json();
       if (data.error) throw new Error(data.error);

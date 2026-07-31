@@ -113,6 +113,10 @@ function getOverlapCount(title1, title2) {
   return overlap;
 }
 
+// In-memory feed cache (3-minute TTL)
+const newsCache = new Map();
+const CACHE_TTL_MS = 3 * 60 * 1000;
+
 // ─── Utility: fetch OpenGraph or article body image from original article page
 async function fetchOgImage(url) {
   if (!url || !url.startsWith("http")) return null;
@@ -121,7 +125,7 @@ async function fetchOgImage(url) {
       headers: { "User-Agent": USER_AGENT },
       cache: "no-store",
       redirect: "follow",
-      signal: AbortSignal.timeout(3500),
+      signal: AbortSignal.timeout(1500),
     });
     if (!res.ok) return null;
     const html = await res.text();
@@ -300,6 +304,22 @@ async function fetchFeed(feedUrl, sourceName, parser) {
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const topic = searchParams.get("topic") || "Liverpool FC";
+  const forceRefresh = searchParams.get("refresh") === "true";
+  const cacheKey = topic.toLowerCase();
+
+  // Return cached result if valid and not force-refreshed
+  if (!forceRefresh && newsCache.has(cacheKey)) {
+    const entry = newsCache.get(cacheKey);
+    if (Date.now() - entry.timestamp < CACHE_TTL_MS) {
+      return new Response(JSON.stringify(entry.data), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "public, s-maxage=180, stale-while-revalidate=300",
+        },
+      });
+    }
+  }
 
   const parser = new XMLParser({ ignoreAttributes: false, parseAttributeValue: true });
 
@@ -412,38 +432,44 @@ export async function GET(request) {
       }
     }
 
-    // ── 6. Enrich all clusters missing real images via live og/body image fetch ─
-    const batchSize = 15;
-    for (let i = 0; i < clusters.length; i += batchSize) {
-      const batch = clusters.slice(i, i + batchSize);
-      await Promise.all(
-        batch.map(async (cluster) => {
-          if (!cluster.imageUrl || cluster.imageUrl.includes("googleusercontent.com") || cluster.imageUrl.includes("gstatic.com")) {
-            let ogImg = await fetchOgImage(cluster.primary_source.url);
-            if (!ogImg && cluster.secondary_sources && cluster.secondary_sources.length > 0) {
-              for (const sec of cluster.secondary_sources) {
-                ogImg = await fetchOgImage(sec.url);
-                if (ogImg) break;
-              }
-            }
-            if (ogImg) {
-              cluster.imageUrl = ogImg;
-            }
-          }
-        })
-      );
-    }
-
-    // ── 7. Sort by most recent primary source ─────────────────────────────────
+    // ── 6. Sort by most recent primary source first ───────────────────────────
     clusters.sort(
       (a, b) =>
         new Date(b.primary_source.published_at).getTime() -
         new Date(a.primary_source.published_at).getTime()
     );
 
+    // ── 7. Enrich only top 12 hero & featured clusters in parallel ────────────
+    const topClusters = clusters.slice(0, 12);
+    await Promise.all(
+      topClusters.map(async (cluster) => {
+        if (!cluster.imageUrl || cluster.imageUrl.includes("googleusercontent.com") || cluster.imageUrl.includes("gstatic.com")) {
+          let ogImg = await fetchOgImage(cluster.primary_source.url);
+          if (!ogImg && cluster.secondary_sources && cluster.secondary_sources.length > 0) {
+            for (const sec of cluster.secondary_sources) {
+              ogImg = await fetchOgImage(sec.url);
+              if (ogImg) break;
+            }
+          }
+          if (ogImg) {
+            cluster.imageUrl = ogImg;
+          }
+        }
+      })
+    );
+
+    // Save to in-memory cache
+    newsCache.set(cacheKey, {
+      timestamp: Date.now(),
+      data: clusters,
+    });
+
     return new Response(JSON.stringify(clusters), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "public, s-maxage=180, stale-while-revalidate=300",
+      },
     });
   } catch (error) {
     console.error("Error in news route:", error);
