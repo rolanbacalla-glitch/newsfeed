@@ -366,12 +366,23 @@ export async function GET(request) {
       });
     });
 
-    // ── 4. Deduplicate by URL ─────────────────────────────────────────────────
+    // ── 4. Deduplicate by URL & Filter out articles older than 1 week (7 days) ───
+    const now = Date.now();
+    const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+
     const seenUrls = new Set();
     const dedupedArticles = allArticles.filter((a) => {
       const key = a.url || a.title;
       if (!key || seenUrls.has(key)) return false;
       seenUrls.add(key);
+
+      // Strict 7-day cutoff & invalid/future date check
+      const pubTime = new Date(a.published_at).getTime();
+      if (isNaN(pubTime)) return false;
+      const ageMs = now - pubTime;
+      // Reject articles older than 7 days or more than 24h in the future
+      if (ageMs > SEVEN_DAYS_MS || ageMs < -24 * 60 * 60 * 1000) return false;
+
       return true;
     });
 

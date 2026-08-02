@@ -513,25 +513,42 @@ export default function Home() {
     return `${m}:${s}`;
   };
 
-  // Client-side search and category filtering
-  const filteredFeed = feed.filter((story) => {
-    // Category filter
-    const matchesCategory =
-      activeCategory === "All" ||
-      story.category.toLowerCase() === activeCategory.toLowerCase();
+  // Client-side search, 7-day cutoff, and category filtering
+  const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+  const nowTime = Date.now();
 
-    // Search filter
-    const searchLower = searchQuery.toLowerCase();
-    const matchesSearch =
-      searchQuery === "" ||
-      story.primary_headline.toLowerCase().includes(searchLower) ||
-      story.summary.toLowerCase().includes(searchLower) ||
-      story.primary_source.name.toLowerCase().includes(searchLower) ||
-      story.category.toLowerCase().includes(searchLower) ||
-      story.sub_topic.toLowerCase().includes(searchLower);
+  const filteredFeed = feed
+    .filter((story) => {
+      // 1. Strict 7-day max-age filter
+      const pubTime = new Date(story.primary_source?.published_at).getTime();
+      if (!isNaN(pubTime)) {
+        const ageMs = nowTime - pubTime;
+        if (ageMs > SEVEN_DAYS_MS) return false;
+      }
 
-    return matchesCategory && matchesSearch;
-  });
+      // 2. Category filter
+      const matchesCategory =
+        activeCategory === "All" ||
+        story.category.toLowerCase() === activeCategory.toLowerCase();
+
+      // 3. Search filter
+      const searchLower = searchQuery.toLowerCase();
+      const matchesSearch =
+        searchQuery === "" ||
+        story.primary_headline.toLowerCase().includes(searchLower) ||
+        story.summary.toLowerCase().includes(searchLower) ||
+        story.primary_source.name.toLowerCase().includes(searchLower) ||
+        story.category.toLowerCase().includes(searchLower) ||
+        story.sub_topic.toLowerCase().includes(searchLower);
+
+      return matchesCategory && matchesSearch;
+    })
+    .sort((a, b) => {
+      // Sort strictly by latest release date descending
+      const timeA = new Date(a.primary_source?.published_at || 0).getTime();
+      const timeB = new Date(b.primary_source?.published_at || 0).getTime();
+      return timeB - timeA;
+    });
 
   // Chronological categorisation buckets
   const hotCoverage = filteredFeed.filter((story) => story.urgency_level === "high");
