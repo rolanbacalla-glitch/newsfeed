@@ -97,6 +97,7 @@ function ArticleImage({ src, alt, category, subTopic }) {
 
 export default function StoryCard({ story }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   const getBadgeStyles = (category) => {
     switch (category.toLowerCase()) {

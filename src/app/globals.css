@@ -16,46 +16,56 @@
 }
 
 :root {
-  /* Premium Monochrome Theme (Default Light) */
-  --bg-app: hsl(0, 0%, 97%);
-  --bg-sidebar: hsl(0, 0%, 93%);
-  --bg-card: hsla(0, 0%, 100%, 0.75);
-  --bg-card-hover: hsla(0, 0%, 100%, 0.95);
-  --border-color: hsla(0, 0%, 0%, 0.08);
-  --border-color-active: hsla(0, 0%, 0%, 0.4);
+  /* Airbnb Design System Tokens (Light Theme) */
+  --bg-app: #F7F7F7;
+  --bg-sidebar: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #FFFFFF;
+  --border-color: #DDDDDD;
+  --border-color-active: #222222;
   
-  --text-primary: hsl(0, 0%, 10%);
-  --text-secondary: hsl(0, 0%, 25%);
-  --text-muted: hsl(0, 0%, 50%);
+  --text-primary: #222222;
+  --text-secondary: #484848;
+  --text-muted: #717171;
   
-  --accent: hsl(0, 0%, 0%); /* Solid Black */
-  --accent-glow: hsla(0, 0%, 0%, 0.06);
-  --accent-hover: hsl(0, 0%, 20%);
+  --accent: #222222; /* High-contrast Airbnb action dark */
+  --accent-glow: rgba(34, 34, 34, 0.08);
+  --accent-hover: #000000;
   
-  --kit-gold: hsl(0, 0%, 24%);
-  --kit-gold-glow: hsla(0, 0%, 0%, 0.05);
-  --score-bg-gradient: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(0, 0%, 88%) 100%);
-  --scoreboard-bg-gradient: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(0, 0%, 93%) 100%);
+  --brand-rausch: #FF385C; /* Airbnb Rausch Red */
   
-  /* Monochrome Category Badges (Light) */
-  --badge-transfer: hsl(0, 0%, 24%);
-  --badge-transfer-bg: hsla(0, 0%, 0%, 0.05);
-  --badge-injury: hsl(0, 0%, 24%);
-  --badge-injury-bg: hsla(0, 0%, 0%, 0.05);
-  --badge-analysis: hsl(0, 0%, 24%);
-  --badge-analysis-bg: hsla(0, 0%, 0%, 0.05);
-  --badge-opinion: hsl(0, 0%, 24%);
-  --badge-opinion-bg: hsla(0, 0%, 0%, 0.05);
-  --badge-match: hsl(0, 0%, 24%);
-  --badge-match-bg: hsla(0, 0%, 0%, 0.05);
-  --badge-club: hsl(0, 0%, 24%);
-  --badge-club-bg: hsla(0, 0%, 0%, 0.05);
+  --kit-gold: #717171;
+  --kit-gold-glow: rgba(0, 0, 0, 0.04);
+  --score-bg-gradient: linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 100%);
+  --scoreboard-bg-gradient: linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 100%);
   
-  --font-sans: var(--font-lfc-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-heading: var(--font-lfc-serif), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Category Badges (Airbnb Style) */
+  --badge-transfer: #222222;
+  --badge-transfer-bg: #F7F7F7;
+  --badge-injury: #FF385C;
+  --badge-injury-bg: rgba(255, 56, 92, 0.08);
+  --badge-analysis: #222222;
+  --badge-analysis-bg: #F7F7F7;
+  --badge-opinion: #222222;
+  --badge-opinion-bg: #F7F7F7;
+  --badge-match: #008A05;
+  --badge-match-bg: rgba(0, 138, 5, 0.08);
+  --badge-club: #222222;
+  --badge-club-bg: #F7F7F7;
+  
+  --font-sans: var(--font-lfc-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-lfc-serif), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   
   --sidebar-width: 280px;
   --header-height: 70px;
+
+  --radius-card: 12px;
+  --radius-pill: 32px;
+  --radius-btn: 8px;
+
+  --shadow-airbnb-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-airbnb-pill: 0 3px 12px rgba(0, 0, 0, 0.1);
+  --shadow-airbnb-hover: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
 /* Dark Theme overrides (Monochrome Dark) */
@@ -136,21 +146,42 @@ a {
   background: var(--accent);
 }
 
-/* Glassmorphism utilities */
+/* Glassmorphism & Airbnb Card utilities */
 .glass {
   background: var(--bg-card);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-color);
-  border-radius: 16px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius-card, 12px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass:hover {
   background: var(--bg-card-hover);
-  border-color: var(--border-color-active);
-  box-shadow: 0 10px 30px -10px var(--accent-glow);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-airbnb-hover, 0 6px 16px rgba(0, 0, 0, 0.12));
   transform: translateY(-2px);
+}
+
+/* Airbnb Specific Component Classes */
+.airbnb-search-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill, 32px);
+  box-shadow: var(--shadow-airbnb-pill, 0 3px 12px rgba(0,0,0,0.08));
+  transition: all 0.2s ease;
+}
+
+.airbnb-search-pill:hover, .airbnb-search-pill:focus-within {
+  box-shadow: var(--shadow-airbnb-hover, 0 6px 16px rgba(0,0,0,0.12));
+  border-color: var(--border-color-active);
+}
+
+.airbnb-category-pill {
+  border-radius: var(--radius-pill, 32px);
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 13px;
 }
 
 /* Page Layout Wrappers */

@@ -124,8 +124,8 @@ export default function Navbar({
           </span>
         </div>
 
-        {/* Unified Search Input */}
-        <div className="relative flex-1 max-w-md">
+        {/* Unified Search Input (Airbnb Elevated Search Pill) */}
+        <div className="relative flex-1 max-w-md airbnb-search-pill overflow-hidden">
           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base text-text-muted select-none pointer-events-none">
             🔍
           </span>
@@ -134,7 +134,7 @@ export default function Navbar({
             placeholder="Search LFC headlines, sources..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-bg-app border border-border-color text-text-primary pr-6 py-3.5 rounded-xl text-sm font-sans outline-none focus:border-accent focus:ring-2 focus:ring-accent-glow transition-all duration-200"
+            className="w-full bg-transparent border-0 text-text-primary pr-6 py-3 rounded-full text-sm font-sans outline-none transition-all duration-200"
             style={{ paddingLeft: '3rem' }}
             id="search-input-navbar"
           />
