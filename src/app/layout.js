@@ -12,9 +12,9 @@ const lfcSans = Montserrat({
 });
 
 export const metadata = {
-  title: "REDLINE LFC - News Aggregator Engine",
-  description: "A high-precision real-time news aggregation and clustering dashboard curating Liverpool FC and European football news.",
-  keywords: ["Liverpool FC", "LFC News", "News Aggregator", "Ground News Clone", "RedLine Clone"],
+  title: "ANFIELD INSIGHTS // Liverpool FC Advanced Tactical Data Engine",
+  description: "Elite tactical intelligence, pass networks, and recruitment analytics engineered strictly for Liverpool FC supporters and tactical analysts.",
+  keywords: ["Liverpool FC", "LFC Analytics", "Pass Network", "Anfield Insights", "Tactical Data", "OBV", "xG", "Kopites"],
 };
 
 export const viewport = {
@@ -24,8 +24,10 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`dark-theme ${lfcSerif.variable} ${lfcSans.variable}`}>
-      <body>{children}</body>
+    <html lang="en-GB" className={`dark-theme ${lfcSerif.variable} ${lfcSans.variable}`}>
+      <body className="bg-[#0D0D10] text-[#FFFFFF] antialiased selection:bg-[#C8102E] selection:text-white">
+        {children}
+      </body>
     </html>
   );
 }

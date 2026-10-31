@@ -1,393 +1,43 @@
 @import "tailwindcss";
 
-@theme {
-  --color-bg-app: var(--bg-app);
-  --color-bg-sidebar: var(--bg-sidebar);
-  --color-bg-card: var(--bg-card);
-  --color-bg-card-hover: var(--bg-card-hover);
-  --color-border-color: var(--border-color);
-  --color-border-active: var(--border-color-active);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-  --color-accent: var(--accent);
-  --color-accent-glow: var(--accent-glow);
-  --color-accent-hover: var(--accent-hover);
+@layer base {
+  :root {
+    --bg-main: #0D0D10;
+    --card-surface: #141419;
+    --card-border: #262630;
+    --lfc-red: #C8102E;
+    --lfc-teal: #00B2A9;
+    --lfc-gold: #F6EB61;
+    --pitch-dark: #08140E;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: #FFFFFF;
+    font-family: var(--font-lfc-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
 }
 
-:root {
-  /* Airbnb Design System Tokens (Light Theme) */
-  --bg-app: #F7F7F7;
-  --bg-sidebar: #FFFFFF;
-  --bg-card: #FFFFFF;
-  --bg-card-hover: #FFFFFF;
-  --border-color: #DDDDDD;
-  --border-color-active: #222222;
-  
-  --text-primary: #222222;
-  --text-secondary: #484848;
-  --text-muted: #717171;
-  
-  --accent: #222222; /* High-contrast Airbnb action dark */
-  --accent-glow: rgba(34, 34, 34, 0.08);
-  --accent-hover: #000000;
-  
-  --brand-rausch: #FF385C; /* Airbnb Rausch Red */
-  
-  --kit-gold: #717171;
-  --kit-gold-glow: rgba(0, 0, 0, 0.04);
-  --score-bg-gradient: linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 100%);
-  --scoreboard-bg-gradient: linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 100%);
-  
-  /* Category Badges (Airbnb Style) */
-  --badge-transfer: #222222;
-  --badge-transfer-bg: #F7F7F7;
-  --badge-injury: #FF385C;
-  --badge-injury-bg: rgba(255, 56, 92, 0.08);
-  --badge-analysis: #222222;
-  --badge-analysis-bg: #F7F7F7;
-  --badge-opinion: #222222;
-  --badge-opinion-bg: #F7F7F7;
-  --badge-match: #008A05;
-  --badge-match-bg: rgba(0, 138, 5, 0.08);
-  --badge-club: #222222;
-  --badge-club-bg: #F7F7F7;
-  
-  --font-sans: var(--font-lfc-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-heading: var(--font-lfc-serif), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  
-  --sidebar-width: 280px;
-  --header-height: 70px;
-
-  --radius-card: 12px;
-  --radius-pill: 32px;
-  --radius-btn: 8px;
-
-  --shadow-airbnb-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-airbnb-pill: 0 3px 12px rgba(0, 0, 0, 0.1);
-  --shadow-airbnb-hover: 0 6px 16px rgba(0, 0, 0, 0.12);
-}
-
-/* Dark Theme overrides (Monochrome Dark) */
-.dark-theme {
-  --bg-app: hsl(0, 0%, 4%);
-  --bg-sidebar: hsl(0, 0%, 8%);
-  --bg-card: hsla(0, 0%, 14%, 0.65);
-  --bg-card-hover: hsla(0, 0%, 18%, 0.8);
-  --border-color: hsla(0, 0%, 100%, 0.08);
-  --border-color-active: hsla(0, 0%, 100%, 0.4);
-  
-  --text-primary: hsl(0, 0%, 98%);
-  --text-secondary: hsl(0, 0%, 82%);
-  --text-muted: hsl(0, 0%, 60%);
-  
-  --accent: hsl(0, 0%, 100%); /* Solid White */
-  --accent-glow: hsla(0, 0%, 100%, 0.12);
-  --accent-hover: hsl(0, 0%, 80%);
-
-  --kit-gold: hsl(0, 0%, 85%);
-  --kit-gold-glow: hsla(0, 0%, 100%, 0.06);
-  --score-bg-gradient: linear-gradient(135deg, hsl(0, 0%, 18%) 0%, hsl(0, 0%, 8%) 100%);
-  --scoreboard-bg-gradient: linear-gradient(135deg, hsl(0, 0%, 13%) 0%, hsl(0, 0%, 6%) 100%);
-
-  --badge-transfer: hsl(0, 0%, 85%);
-  --badge-transfer-bg: hsla(0, 0%, 100%, 0.06);
-  --badge-injury: hsl(0, 0%, 85%);
-  --badge-injury-bg: hsla(0, 0%, 100%, 0.06);
-  --badge-analysis: hsl(0, 0%, 85%);
-  --badge-analysis-bg: hsla(0, 0%, 100%, 0.06);
-  --badge-opinion: hsl(0, 0%, 85%);
-  --badge-opinion-bg: hsla(0, 0%, 100%, 0.06);
-  --badge-match: hsl(0, 0%, 85%);
-  --badge-match-bg: hsla(0, 0%, 100%, 0.06);
-  --badge-club: hsl(0, 0%, 85%);
-  --badge-club-bg: hsla(0, 0%, 100%, 0.06);
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html, body {
-  height: 100%;
-  width: 100%;
-  color: var(--text-primary);
-  background-color: var(--bg-app);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Custom Premium Scrollbar */
+/* Custom Tactical Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-app);
+  background: #0D0D10;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
+  background: #262630;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
+  background: #C8102E;
 }
 
-/* Glassmorphism & Airbnb Card utilities */
-.glass {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-card, 12px);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-color);
-  box-shadow: var(--shadow-airbnb-hover, 0 6px 16px rgba(0, 0, 0, 0.12));
-  transform: translateY(-2px);
-}
-
-/* Airbnb Specific Component Classes */
-.airbnb-search-pill {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-pill, 32px);
-  box-shadow: var(--shadow-airbnb-pill, 0 3px 12px rgba(0,0,0,0.08));
-  transition: all 0.2s ease;
-}
-
-.airbnb-search-pill:hover, .airbnb-search-pill:focus-within {
-  box-shadow: var(--shadow-airbnb-hover, 0 6px 16px rgba(0,0,0,0.12));
-  border-color: var(--border-color-active);
-}
-
-.airbnb-category-pill {
-  border-radius: var(--radius-pill, 32px);
-  transition: all 0.2s ease;
-  font-weight: 500;
-  font-size: 13px;
-}
-
-/* Page Layout Wrappers */
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* Hide scrollbar utility */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.app-container > * {
-  min-width: 0;
-}
-
-/* ─── Layout containers ──────────────────────────────────────────────────────
-   These replace Tailwind's max-w-7xl mx-auto which Turbopack doesn't compile.
-   max-w-7xl = 80rem = 1280px                                                 */
-.container-bounded {
-  width: 100%;
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;   /* 16px — mobile */
-  padding-right: 1rem;
-}
-
-@media (min-width: 640px) {
-  .container-bounded {
-    padding-left: 1.5rem;  /* 24px — sm */
-    padding-right: 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container-bounded {
-    padding-left: 2rem;  /* 32px — lg */
-    padding-right: 2rem;
-  }
-}
-
-
-/* ─── Feed grid ──────────────────────────────────────────────────────────────*/
-.feed-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;             /* 24px — MD3 card grid spacing */
-}
-
-@media (min-width: 768px) {
-  .feed-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1280px) {
-  .feed-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* ─── Card layout spacing ────────────────────────────────────────────────────
-   Hardcoded because Tailwind utility classes from JSX are not compiled by
-   Turbopack in this setup. All spacing follows an 8pt grid.                  */
-
-/* Standard grid card — MD3: 24px padding, 16px body gap */
-.card-standard {
-  padding: 1.5rem;         /* 24px — MD3 card content area */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.card-standard .card-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;               /* 16px — MD3 between related elements */
-}
-
-.card-standard .card-footer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1.25rem;     /* 20px — MD3 spacing between body and footer */
-}
-
-.card-standard .card-footer-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  padding-top: 1rem;       /* 16px — MD3 divider breathing room */
-  border-top: 1px solid var(--border-color);
-}
-
-/* Hot (hero) card — MD3 with left thumbnail layout */
-.card-hot {
-  padding: 0 !important;
-  display: flex;
-  flex-direction: column;
-}
-
-@media (min-width: 768px) {
-  .card-hot {
-    flex-direction: row;
-    align-items: stretch;
-    gap: 0;
-  }
-}
-
-.card-hot-content {
-  flex: 1;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  min-width: 0;
-}
-
-@media (min-width: 768px) {
-  .card-hot-content {
-    padding: 1.5em 1.75em 1.5em 1em; /* 1em spacing from image */
-    gap: 1.25rem;
-  }
-}
-
-.card-hot .card-footer-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 0.25rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-color);
-}
-
-/* Secondary sources accordion */
-.card-sources {
-  margin-top: 0.5rem;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  border: 1px dashed var(--border-color);
-  background: color-mix(in srgb, var(--bg-app) 50%, transparent);
-}
-
-.card-sources ul {
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-}
-
-.card-sources li {
-  padding-top: 0.625rem;
-  border-top: 1px solid color-mix(in srgb, var(--border-color) 40%, transparent);
-}
-
-.card-sources li:first-child {
-  padding-top: 0;
-  border-top: none;
-}
-
-/* Base Badge Style */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.badge-transfer { color: var(--badge-transfer); background: var(--badge-transfer-bg); }
-.badge-injury { color: var(--badge-injury); background: var(--badge-injury-bg); }
-.badge-analysis { color: var(--badge-analysis); background: var(--badge-analysis-bg); }
-.badge-opinion { color: var(--badge-opinion); background: var(--badge-opinion-bg); }
-.badge-match-report { color: var(--badge-match); background: var(--badge-match-bg); }
-.badge-club-news { color: var(--badge-club); background: var(--badge-club-bg); }
-
-/* Custom animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
-}
-
-@media (max-width: 768px) {
-  :root {
-    --sidebar-width: 100%;
-    --header-height: auto;
-  }
-
-  .app-container {
-    flex-direction: column;
-  }
+/* Range input accent styling */
+input[type="range"] {
+  accent-color: #C8102E;
 }
