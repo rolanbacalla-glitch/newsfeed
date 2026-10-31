@@ -1,9 +1,31 @@
 "use client";
 
-import React from "react";
-import { Shield, Activity, Clock, UserSearch, Radio } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Shield, Activity, Clock, UserSearch, Radio, Calendar, Trophy } from "lucide-react";
 
 export default function Header({ activeTab, setActiveTab }) {
+  const [latestMatch, setLatestMatch] = useState(null);
+
+  useEffect(() => {
+    async function fetchLiveStatus() {
+      try {
+        const res = await fetch("/api/live-fixtures");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.matches && data.matches.length > 0) {
+            // Find next scheduled or most recent match
+            const scheduled = data.matches.find((m) => m.status === "SCHEDULED");
+            const finished = data.matches.filter((m) => m.status === "FINISHED").pop();
+            setLatestMatch(scheduled || finished || data.matches[0]);
+          }
+        }
+      } catch (e) {
+        // Silent degrade to static ticker
+      }
+    }
+    fetchLiveStatus();
+  }, []);
+
   const tabs = [
     { id: "boot-room", label: "Boot Room Live", icon: Activity, emoji: "🏟️" },
     { id: "time-machine", label: "Anfield Time Machine", icon: Clock, emoji: "⏳" },
@@ -28,7 +50,7 @@ export default function Header({ activeTab, setActiveTab }) {
                 ANFIELD <span className="text-[#C8102E]">INSIGHTS</span>
               </h1>
               <span className="px-1.5 py-0.5 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase rounded bg-[#00B2A9]/15 text-[#00B2A9] border border-[#00B2A9]/30">
-                v2.6
+                LIVE v2.6
               </span>
             </div>
             <p className="text-[10px] sm:text-[11px] text-[#9CA3AF] tracking-wide hidden xs:block">
@@ -39,18 +61,29 @@ export default function Header({ activeTab, setActiveTab }) {
       </div>
 
       {/* Live Match / Pitch Ticker */}
-      <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#141419] border border-[#262630]">
+      <div className="hidden xl:flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#141419] border border-[#262630] text-xs">
         <Radio className="w-3.5 h-3.5 text-[#C8102E] animate-pulse" />
-        <span className="text-xs font-semibold text-white tracking-wide">
-          ANFIELD • THE KOP STAND
-        </span>
-        <span className="text-xs text-[#9CA3AF]">•</span>
-        <span className="text-xs text-[#00B2A9] font-mono font-medium">
-          SHAPE: 4-3-3 (3-2-4-1 BUILD-UP)
-        </span>
+        {latestMatch ? (
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-white">
+              {latestMatch.status === "SCHEDULED" ? "NEXT FIXTURE:" : "LAST RESULT:"}
+            </span>
+            <span className="text-[#C8102E] font-bold">
+              {latestMatch.homeTeam} {latestMatch.homeScore !== null ? latestMatch.homeScore : ""} - {latestMatch.awayScore !== null ? latestMatch.awayScore : ""} {latestMatch.awayTeam}
+            </span>
+            <span className="text-[#9CA3AF]">•</span>
+            <span className="text-[#00B2A9] font-mono font-medium">{latestMatch.competition}</span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-white">ANFIELD • THE KOP STAND</span>
+            <span className="text-[#9CA3AF]">•</span>
+            <span className="text-[#00B2A9] font-mono font-medium">SHAPE: 4-3-3 (3-2-4-1 BUILD-UP)</span>
+          </div>
+        )}
       </div>
 
-      {/* Tab Nav Controls (Mobile scrollable row, desktop button group) */}
+      {/* Tab Nav Controls */}
       <nav className="flex items-center gap-1 p-1 rounded-xl bg-[#141419] border border-[#262630] w-full sm:w-auto justify-between sm:justify-start overflow-x-auto">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
