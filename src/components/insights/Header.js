@@ -1,10 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Shield, Activity, Clock, UserSearch, Radio, Calendar, Trophy } from "lucide-react";
+import { Shield, Activity, Clock, UserSearch, Radio, Calendar, ChevronRight } from "lucide-react";
 
 export default function Header({ activeTab, setActiveTab }) {
-  const [latestMatch, setLatestMatch] = useState(null);
+  const [matchData, setMatchData] = useState({
+    nextMatch: null,
+    lastMatch: null,
+  });
 
   useEffect(() => {
     async function fetchLiveStatus() {
@@ -12,15 +15,13 @@ export default function Header({ activeTab, setActiveTab }) {
         const res = await fetch("/api/live-fixtures");
         if (res.ok) {
           const data = await res.json();
-          if (data.matches && data.matches.length > 0) {
-            // Find next scheduled or most recent match
-            const scheduled = data.matches.find((m) => m.status === "SCHEDULED");
-            const finished = data.matches.filter((m) => m.status === "FINISHED").pop();
-            setLatestMatch(scheduled || finished || data.matches[0]);
-          }
+          setMatchData({
+            nextMatch: data.nextMatch || (data.matches && data.matches.find(m => m.status === "SCHEDULED")),
+            lastMatch: data.lastMatch || (data.matches && data.matches.filter(m => m.status === "FINISHED").pop()),
+          });
         }
       } catch (e) {
-        // Silent degrade to static ticker
+        // Silent degrade
       }
     }
     fetchLiveStatus();
@@ -31,6 +32,9 @@ export default function Header({ activeTab, setActiveTab }) {
     { id: "time-machine", label: "Anfield Time Machine", icon: Clock, emoji: "⏳" },
     { id: "transfer-scout", label: "Transfer Scout", icon: UserSearch, emoji: "🔍" },
   ];
+
+  const nextMatch = matchData.nextMatch;
+  const lastMatch = matchData.lastMatch;
 
   return (
     <header className="sticky top-0 z-50 bg-[#0D0D10]/95 backdrop-blur-md border-b border-[#262630] px-3 sm:px-4 md:px-6 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -50,7 +54,7 @@ export default function Header({ activeTab, setActiveTab }) {
                 ANFIELD <span className="text-[#C8102E]">INSIGHTS</span>
               </h1>
               <span className="px-1.5 py-0.5 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase rounded bg-[#00B2A9]/15 text-[#00B2A9] border border-[#00B2A9]/30">
-                LIVE v2.6
+                LFC 2026/27
               </span>
             </div>
             <p className="text-[10px] sm:text-[11px] text-[#9CA3AF] tracking-wide hidden xs:block">
@@ -60,25 +64,37 @@ export default function Header({ activeTab, setActiveTab }) {
         </div>
       </div>
 
-      {/* Live Match / Pitch Ticker */}
-      <div className="hidden xl:flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#141419] border border-[#262630] text-xs">
-        <Radio className="w-3.5 h-3.5 text-[#C8102E] animate-pulse" />
-        {latestMatch ? (
+      {/* Live Match Ticker with Real-Time LFC Fixtures */}
+      <div className="hidden xl:flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-[#141419] border border-[#262630] text-xs">
+        <Radio className="w-3.5 h-3.5 text-[#C8102E] animate-pulse shrink-0" />
+        
+        {nextMatch ? (
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-white">
-              {latestMatch.status === "SCHEDULED" ? "NEXT FIXTURE:" : "LAST RESULT:"}
+            <span className="font-bold text-[#F6EB61] tracking-wider uppercase text-[10px] bg-[#F6EB61]/10 px-2 py-0.5 rounded border border-[#F6EB61]/25">
+              NEXT MATCH
             </span>
-            <span className="text-[#C8102E] font-bold">
-              {latestMatch.homeTeam} {latestMatch.homeScore !== null ? latestMatch.homeScore : ""} - {latestMatch.awayScore !== null ? latestMatch.awayScore : ""} {latestMatch.awayTeam}
+            <span className="font-bold text-white">
+              {nextMatch.homeTeam} vs {nextMatch.awayTeam}
             </span>
             <span className="text-[#9CA3AF]">•</span>
-            <span className="text-[#00B2A9] font-mono font-medium">{latestMatch.competition}</span>
+            <span className="text-[#00B2A9] font-mono font-medium">{nextMatch.competition}</span>
+            <span className="text-[#9CA3AF]">•</span>
+            <span className="text-[#9CA3AF] font-mono text-[11px]">{nextMatch.venue}</span>
           </div>
         ) : (
           <div className="flex items-center gap-2">
             <span className="font-semibold text-white">ANFIELD • THE KOP STAND</span>
             <span className="text-[#9CA3AF]">•</span>
             <span className="text-[#00B2A9] font-mono font-medium">SHAPE: 4-3-3 (3-2-4-1 BUILD-UP)</span>
+          </div>
+        )}
+
+        {lastMatch && (
+          <div className="flex items-center gap-2 pl-2 border-l border-[#262630] text-[11px] text-[#9CA3AF]">
+            <span>Last:</span>
+            <span className="text-white font-mono font-semibold">
+              {lastMatch.homeTeam} {lastMatch.homeScore}-{lastMatch.awayScore} {lastMatch.awayTeam}
+            </span>
           </div>
         )}
       </div>
