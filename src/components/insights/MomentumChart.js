@@ -4,37 +4,27 @@ import React from "react";
 import { Sliders, Flame, Crosshair, BarChart3, TrendingUp, Zap, Target } from "lucide-react";
 
 export default function MomentumChart({
+  activeMatch,
   overlayMode,
   setOverlayMode,
   selectedPlayer,
 }) {
-  // Momentum datapoints across 90 minutes (-100 to +100 Liverpool territorial pressure)
-  const momentumPoints = [
-    { min: 0, val: 25 },
-    { min: 10, val: 40 },
-    { min: 19, val: 65, event: "Díaz Chance (19')" },
-    { min: 28, val: 50 },
-    { min: 34, val: 92, event: "Salah Goal (34')", isGoal: true },
-    { min: 45, val: 60 },
-    { min: 52, val: 75, event: "Salah 1v1 (52')" },
-    { min: 60, val: 45 },
-    { min: 65, val: 30, event: "Subs: Jones / Bradley (65')" },
-    { min: 68, val: 88, event: "Gakpo Header (68')", isGoal: true },
-    { min: 78, val: 70 },
-    { min: 85, val: 55 },
-    { min: 90, val: 60 },
-  ];
+  const momentumPoints = activeMatch?.momentumPoints || [];
+  const metrics = activeMatch?.metrics || {
+    teamXg: 2.14,
+    opponentXg: 1.15,
+    fieldTilt: 65,
+    ppda: 7.4,
+    counterPressRegains: 22,
+  };
 
   // Map to SVG coordinates (width: 300, height: 100, zero-line at Y=50)
-  // min: 0..90 -> x: 10..290
-  // val: -100..+100 -> y: 90..10
   const points = momentumPoints.map((p) => {
     const x = 15 + (p.min / 90) * 270;
     const y = 50 - (p.val / 100) * 40;
     return { ...p, x, y };
   });
 
-  // Build SVG path
   const pathD = points.reduce((acc, p, idx) => {
     if (idx === 0) return `M ${p.x} ${p.y}`;
     const prev = points[idx - 1];
@@ -45,18 +35,24 @@ export default function MomentumChart({
     return `${acc} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${p.x} ${p.y}`;
   }, "");
 
-  // Area path for gradient fill
-  const areaD = `${pathD} L ${points[points.length - 1].x} 50 L ${points[0].x} 50 Z`;
+  const areaD = points.length
+    ? `${pathD} L ${points[points.length - 1].x} 50 L ${points[0].x} 50 Z`
+    : "";
 
   return (
     <div className="w-full flex flex-col gap-4">
       {/* 1. Tactical Metric Overlay Controller */}
       <div className="bg-[#141419] rounded-2xl border border-[#262630] p-4 shadow-lg">
-        <div className="flex items-center gap-2 mb-3">
-          <Sliders className="w-4 h-4 text-[#C8102E]" />
-          <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-            Metric Canvas Controller
-          </h3>
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Sliders className="w-4 h-4 text-[#C8102E]" />
+            <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+              Tactical Canvas Mode
+            </h3>
+          </div>
+          <span className="text-[10px] text-[#00B2A9] font-mono font-bold">
+            {activeMatch?.competition}
+          </span>
         </div>
 
         <div className="grid grid-cols-3 gap-2">
@@ -98,21 +94,20 @@ export default function MomentumChart({
         </div>
       </div>
 
-      {/* 2. Match Momentum & xG Timeline Area Chart */}
+      {/* 2. Match Momentum & Key Moments Wave */}
       <div className="bg-[#141419] rounded-2xl border border-[#262630] p-4 shadow-lg">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-[#00B2A9]" />
             <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-              Rolling Match Momentum
+              Match Momentum Wave
             </h3>
           </div>
           <span className="text-[10px] text-[#00B2A9] font-mono font-bold bg-[#00B2A9]/10 px-2 py-0.5 rounded border border-[#00B2A9]/20">
-            LIVERPOOL +64% DOMINANCE
+            {activeMatch?.statusText}
           </span>
         </div>
 
-        {/* SVG Area Wave */}
         <div className="relative w-full h-28 bg-[#0D0D10] rounded-xl border border-[#262630] p-2 flex items-center justify-center overflow-hidden">
           <svg viewBox="0 0 300 100" className="w-full h-full">
             <defs>
@@ -123,16 +118,10 @@ export default function MomentumChart({
               </linearGradient>
             </defs>
 
-            {/* Zero axis */}
             <line x1="15" y1="50" x2="285" y2="50" stroke="#262630" strokeWidth="1" strokeDasharray="3, 3" />
+            {areaD && <path d={areaD} fill="url(#momentumGrad)" />}
+            {pathD && <path d={pathD} fill="none" stroke="#C8102E" strokeWidth="2.5" strokeLinecap="round" />}
 
-            {/* Area Fill */}
-            <path d={areaD} fill="url(#momentumGrad)" />
-
-            {/* Line Curve */}
-            <path d={pathD} fill="none" stroke="#C8102E" strokeWidth="2.5" strokeLinecap="round" />
-
-            {/* Key Event Markers */}
             {points.map((p, idx) => {
               if (!p.event) return null;
               return (
@@ -175,7 +164,7 @@ export default function MomentumChart({
         <div className="flex items-center gap-2 mb-3">
           <Zap className="w-4 h-4 text-[#F6EB61]" />
           <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-            Match Pressure Metrics
+            Key Match Science Indicators
           </h3>
         </div>
 
@@ -183,36 +172,38 @@ export default function MomentumChart({
           <div className="bg-[#0D0D10] p-2.5 rounded-xl border border-[#262630]">
             <span className="text-[#9CA3AF] text-[10px] uppercase font-semibold">Total Team xG</span>
             <div className="flex items-baseline gap-1 mt-0.5">
-              <span className="text-lg font-black text-white font-mono">2.68</span>
-              <span className="text-[10px] text-[#9CA3AF]">vs 0.72</span>
+              <span className="text-lg font-black text-white font-mono">{metrics.teamXg.toFixed(2)}</span>
+              <span className="text-[10px] text-[#9CA3AF]">vs {metrics.opponentXg.toFixed(2)}</span>
             </div>
-            <span className="text-[9px] text-[#00B2A9] font-medium">+1.96 xG Differential</span>
+            <span className="text-[9px] text-[#00B2A9] font-medium">
+              +{(metrics.teamXg - metrics.opponentXg).toFixed(2)} xG Diff
+            </span>
           </div>
 
           <div className="bg-[#0D0D10] p-2.5 rounded-xl border border-[#262630]">
             <span className="text-[#9CA3AF] text-[10px] uppercase font-semibold">Field Tilt (%)</span>
             <div className="flex items-baseline gap-1 mt-0.5">
-              <span className="text-lg font-black text-[#C8102E] font-mono">71.4%</span>
+              <span className="text-lg font-black text-[#C8102E] font-mono">{metrics.fieldTilt}%</span>
             </div>
-            <span className="text-[9px] text-[#9CA3AF]">Deep final-third territory</span>
+            <span className="text-[9px] text-[#9CA3AF]">Territory dominance</span>
           </div>
 
           <div className="bg-[#0D0D10] p-2.5 rounded-xl border border-[#262630]">
             <span className="text-[#9CA3AF] text-[10px] uppercase font-semibold">Defensive PPDA</span>
             <div className="flex items-baseline gap-1 mt-0.5">
-              <span className="text-lg font-black text-[#00B2A9] font-mono">7.2</span>
-              <span className="text-[10px] text-[#9CA3AF]">passes/action</span>
+              <span className="text-lg font-black text-[#00B2A9] font-mono">{metrics.ppda}</span>
+              <span className="text-[10px] text-[#9CA3AF]">passes/act</span>
             </div>
-            <span className="text-[9px] text-[#00B2A9]">Intense High Press</span>
+            <span className="text-[9px] text-[#00B2A9]">High Press Index</span>
           </div>
 
           <div className="bg-[#0D0D10] p-2.5 rounded-xl border border-[#262630]">
             <span className="text-[#9CA3AF] text-[10px] uppercase font-semibold">Counter-Press Regains</span>
             <div className="flex items-baseline gap-1 mt-0.5">
-              <span className="text-lg font-black text-white font-mono">24</span>
-              <span className="text-[10px] text-[#F6EB61]">recov.</span>
+              <span className="text-lg font-black text-white font-mono">{metrics.counterPressRegains}</span>
+              <span className="text-[10px] text-[#F6EB61]">regains</span>
             </div>
-            <span className="text-[9px] text-[#F6EB61]">6 inside attacking 40m</span>
+            <span className="text-[9px] text-[#F6EB61]">Gegenpress turnovers</span>
           </div>
         </div>
       </div>
