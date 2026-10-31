@@ -13,111 +13,135 @@ export const RADAR_AXES = [
   { key: "aerialDominance", label: "Aerial Win Rate %" },
 ];
 
-// Candidates and LFC Benchmarks
+// Candidates and LFC Benchmarks (Current 2026/27 Squad)
 export const PROFILE_POOL = [
-  // Benchmarks
+  // Current Liverpool Benchmarks
   {
     id: "szoboszlai",
-    name: "Dominik Szoboszlai",
+    name: "Dominik Szoboszlai (#8)",
     club: "Liverpool FC",
-    role: "Current Midfield Benchmark",
-    age: 24,
-    marketVal: "£75m",
-    pressing: 8.8,
-    progPasses: 7.9,
-    stats: { goalThreat: 78, progCarries: 85, creativePassing: 88, pressingIntensity: 92, defInterceptions: 74, aerialDominance: 66 },
-    profileType: "benchmark",
-  },
-  {
-    id: "salah",
-    name: "Mohamed Salah",
-    club: "Liverpool FC",
-    role: "Current Wide Forward Benchmark",
-    age: 32,
-    marketVal: "£65m",
-    pressing: 6.4,
-    progPasses: 6.8,
-    stats: { goalThreat: 96, progCarries: 90, creativePassing: 93, pressingIntensity: 68, defInterceptions: 45, aerialDominance: 42 },
+    role: "LFC Attacking Midfield Benchmark",
+    age: 26,
+    marketVal: "£85m",
+    pressing: 8.9,
+    progPasses: 8.2,
+    stats: { goalThreat: 80, progCarries: 86, creativePassing: 89, pressingIntensity: 94, defInterceptions: 76, aerialDominance: 68 },
     profileType: "benchmark",
   },
   {
     id: "gravenberch",
-    name: "Ryan Gravenberch",
+    name: "Ryan Gravenberch (#38)",
     club: "Liverpool FC",
-    role: "Current No.6 / Controller",
-    age: 22,
-    marketVal: "£60m",
-    pressing: 8.9,
-    progPasses: 8.4,
-    stats: { goalThreat: 58, progCarries: 94, creativePassing: 82, pressingIntensity: 91, defInterceptions: 88, aerialDominance: 76 },
+    role: "LFC No.6 / Double Pivot Controller",
+    age: 24,
+    marketVal: "£80m",
+    pressing: 9.1,
+    progPasses: 8.6,
+    stats: { goalThreat: 62, progCarries: 96, creativePassing: 84, pressingIntensity: 93, defInterceptions: 90, aerialDominance: 78 },
+    profileType: "benchmark",
+  },
+  {
+    id: "chiesa",
+    name: "Federico Chiesa (#14)",
+    club: "Liverpool FC",
+    role: "LFC High-Pace Dynamic Winger",
+    age: 29,
+    marketVal: "£45m",
+    pressing: 8.2,
+    progPasses: 7.5,
+    stats: { goalThreat: 86, progCarries: 92, creativePassing: 82, pressingIntensity: 84, defInterceptions: 56, aerialDominance: 50 },
+    profileType: "benchmark",
+  },
+  {
+    id: "bradley",
+    name: "Conor Bradley (#84)",
+    club: "Liverpool FC",
+    role: "LFC High-Energy Right Back",
+    age: 23,
+    marketVal: "£45m",
+    pressing: 9.4,
+    progPasses: 7.8,
+    stats: { goalThreat: 60, progCarries: 88, creativePassing: 81, pressingIntensity: 96, defInterceptions: 88, aerialDominance: 72 },
+    profileType: "benchmark",
+  },
+  {
+    id: "salah",
+    name: "Mohamed Salah (#11)",
+    club: "Liverpool FC",
+    role: "LFC Elite Goal Threat Reference",
+    age: 34,
+    marketVal: "£55m",
+    pressing: 6.2,
+    progPasses: 6.9,
+    stats: { goalThreat: 98, progCarries: 90, creativePassing: 94, pressingIntensity: 66, defInterceptions: 42, aerialDominance: 40 },
     profileType: "benchmark",
   },
 
-  // Active Transfer Targets / Rumours
+  // Active Transfer Targets / FSG Recruitment Watchlist
   {
     id: "wirtz",
     name: "Florian Wirtz",
     club: "Bayer Leverkusen",
-    role: "Playmaker / Inside Forward",
-    age: 21,
+    role: "Playmaker / Half-Space Creator",
+    age: 23,
     marketVal: "£110m",
-    pressing: 8.4,
-    progPasses: 9.1,
-    stats: { goalThreat: 89, progCarries: 96, creativePassing: 98, pressingIntensity: 84, defInterceptions: 62, aerialDominance: 48 },
+    pressing: 8.6,
+    progPasses: 9.3,
+    stats: { goalThreat: 90, progCarries: 97, creativePassing: 98, pressingIntensity: 86, defInterceptions: 64, aerialDominance: 48 },
     profileType: "target",
-    fitScore: 96,
+    fitScore: 97,
   },
   {
     id: "larsson",
     name: "Hugo Larsson",
     club: "Eintracht Frankfurt",
     role: "Box-to-Box Engine",
-    age: 20,
-    marketVal: "£38m",
+    age: 22,
+    marketVal: "£42m",
     pressing: 9.3,
-    progPasses: 7.6,
-    stats: { goalThreat: 64, progCarries: 81, creativePassing: 78, pressingIntensity: 95, defInterceptions: 86, aerialDominance: 72 },
+    progPasses: 7.8,
+    stats: { goalThreat: 66, progCarries: 82, creativePassing: 80, pressingIntensity: 95, defInterceptions: 87, aerialDominance: 74 },
+    profileType: "target",
+    fitScore: 94,
+  },
+  {
+    id: "kerkez",
+    name: "Milos Kerkez",
+    club: "AFC Bournemouth",
+    role: "Left-Back / High-Intensity Overlap",
+    age: 22,
+    marketVal: "£40m",
+    pressing: 8.9,
+    progPasses: 8.1,
+    stats: { goalThreat: 54, progCarries: 89, creativePassing: 77, pressingIntensity: 92, defInterceptions: 84, aerialDominance: 70 },
     profileType: "target",
     fitScore: 93,
+  },
+  {
+    id: "frimpong",
+    name: "Jeremie Frimpong",
+    club: "Bayer Leverkusen",
+    role: "Direct Wing-Back / Transition Threat",
+    age: 25,
+    marketVal: "£50m",
+    pressing: 8.3,
+    progPasses: 8.4,
+    stats: { goalThreat: 84, progCarries: 98, creativePassing: 86, pressingIntensity: 81, defInterceptions: 62, aerialDominance: 44 },
+    profileType: "target",
+    fitScore: 90,
   },
   {
     id: "kudus",
     name: "Mohammed Kudus",
     club: "West Ham United",
-    role: "Wide Dynamic Dribbler",
-    age: 24,
-    marketVal: "£70m",
-    pressing: 7.8,
-    progPasses: 7.2,
-    stats: { goalThreat: 84, progCarries: 95, creativePassing: 76, pressingIntensity: 82, defInterceptions: 68, aerialDominance: 65 },
+    role: "Inverted Winger / Ball Carrier",
+    age: 26,
+    marketVal: "£75m",
+    pressing: 7.9,
+    progPasses: 7.4,
+    stats: { goalThreat: 85, progCarries: 96, creativePassing: 78, pressingIntensity: 82, defInterceptions: 66, aerialDominance: 66 },
     profileType: "target",
     fitScore: 89,
-  },
-  {
-    id: "inacio",
-    name: "Gonçalo Inácio",
-    club: "Sporting CP",
-    role: "Left-Sided Ball-Playing CB",
-    age: 23,
-    marketVal: "£50m",
-    pressing: 7.2,
-    progPasses: 8.8,
-    stats: { goalThreat: 42, progCarries: 82, creativePassing: 74, pressingIntensity: 76, defInterceptions: 92, aerialDominance: 87 },
-    profileType: "target",
-    fitScore: 91,
-  },
-  {
-    id: "bakayoko",
-    name: "Johan Bakayoko",
-    club: "PSV Eindhoven",
-    role: "Inverted Winger",
-    age: 21,
-    marketVal: "£42m",
-    pressing: 8.1,
-    progPasses: 7.4,
-    stats: { goalThreat: 82, progCarries: 91, creativePassing: 84, pressingIntensity: 80, defInterceptions: 54, aerialDominance: 52 },
-    profileType: "target",
-    fitScore: 88,
   },
 ];
 
@@ -127,21 +151,18 @@ export default function TransferScoutView() {
 
   // Interactive Recruitment Sliders
   const [minPressing, setMinPressing] = useState(7.5);
-  const [maxAge, setMaxAge] = useState(24);
+  const [maxAge, setMaxAge] = useState(25);
   const [minProgPasses, setMinProgPasses] = useState(7.0);
 
-  const targetPlayer = PROFILE_POOL.find((p) => p.id === targetId) || PROFILE_POOL[3];
+  const targetPlayer = PROFILE_POOL.find((p) => p.id === targetId) || PROFILE_POOL[5];
   const benchmarkPlayer = PROFILE_POOL.find((p) => p.id === benchmarkId) || PROFILE_POOL[0];
 
-  // Radar chart trigonometry math
-  // Centre at (150, 150), radius = 105
   const centreX = 150;
   const centreY = 150;
   const maxR = 105;
   const totalAxes = RADAR_AXES.length;
 
   const getCoordinates = (value, index) => {
-    // start at -90deg (12 o'clock)
     const angle = (Math.PI * 2 / totalAxes) * index - Math.PI / 2;
     const r = (value / 100) * maxR;
     const x = centreX + r * Math.cos(angle);
@@ -155,7 +176,6 @@ export default function TransferScoutView() {
   const targetPolygon = targetPoints.map((p) => `${p.x},${p.y}`).join(" ");
   const benchmarkPolygon = benchmarkPoints.map((p) => `${p.x},${p.y}`).join(" ");
 
-  // Dynamic candidate filter based on recruitment sliders
   const filteredCandidates = PROFILE_POOL.filter(
     (p) => p.profileType === "target" && p.pressing >= minPressing && p.age <= maxAge && p.progPasses >= minProgPasses
   );
@@ -188,7 +208,7 @@ export default function TransferScoutView() {
 
           <div className="w-full sm:w-1/2">
             <label className="text-[10px] uppercase font-bold text-[#C8102E] tracking-wider block mb-1">
-              Liverpool Squad Benchmark (Red Polygon)
+              Current LFC Benchmark (Red Polygon)
             </label>
             <div className="relative">
               <select
@@ -218,7 +238,6 @@ export default function TransferScoutView() {
 
           {/* Inline SVG Radar Wheel */}
           <svg viewBox="0 0 300 300" className="w-full max-w-[420px] max-h-[380px]">
-            {/* Concentric baseline circles (20%, 40%, 60%, 80%, 100%) */}
             {[20, 40, 60, 80, 100].map((level) => (
               <polygon
                 key={level}
@@ -233,7 +252,6 @@ export default function TransferScoutView() {
               />
             ))}
 
-            {/* Radial spoke lines */}
             {RADAR_AXES.map((_, i) => {
               const p = getCoordinates(100, i);
               return (
@@ -319,7 +337,6 @@ export default function TransferScoutView() {
           </div>
 
           <div className="space-y-3.5 text-xs">
-            {/* Slider 1: Pressing */}
             <div>
               <div className="flex justify-between font-semibold mb-1">
                 <span className="text-[#9CA3AF]">Counter-Pressing Rate (PAdj)</span>
@@ -336,7 +353,6 @@ export default function TransferScoutView() {
               />
             </div>
 
-            {/* Slider 2: Age Ceiling */}
             <div>
               <div className="flex justify-between font-semibold mb-1">
                 <span className="text-[#9CA3AF]">Max Age Ceiling (FSG Profile)</span>
@@ -353,7 +369,6 @@ export default function TransferScoutView() {
               />
             </div>
 
-            {/* Slider 3: Progressive Passes */}
             <div>
               <div className="flex justify-between font-semibold mb-1">
                 <span className="text-[#9CA3AF]">Prog. Passes / 90</span>
