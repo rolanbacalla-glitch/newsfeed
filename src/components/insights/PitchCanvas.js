@@ -66,38 +66,38 @@ export default function PitchCanvas({
   const getPlayer = (id) => LFC_STARTING_XI.find((p) => p.id === id);
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-between rounded-2xl bg-[#08140E] border border-[#262630] overflow-hidden shadow-2xl p-3 md:p-5 select-none">
+    <div className="relative w-full h-full min-h-[360px] sm:min-h-[420px] flex flex-col justify-between rounded-2xl bg-[#08140E] border border-[#262630] overflow-hidden shadow-2xl p-2.5 sm:p-4 md:p-5 select-none">
       {/* Top Overlay Badge Bar */}
-      <div className="flex items-center justify-between z-10 mb-2">
-        <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-[#0D0D10]/85 border border-[#262630] backdrop-blur-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between z-10 gap-2 mb-2">
+        <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#0D0D10]/85 border border-[#262630] backdrop-blur-md self-start sm:self-auto">
           <span className="w-2 h-2 rounded-full bg-[#00B2A9] animate-pulse"></span>
-          <span className="text-xs font-bold text-white uppercase tracking-wider">
-            {overlayMode === "pass" && "Pass Network & Positional Average Layer"}
-            {overlayMode === "heat" && "Attacking Half-Space Heatmap Overlay"}
-            {overlayMode === "shots" && "Shot Locations & Expected Goals (xG) Map"}
+          <span className="text-[10px] sm:text-xs font-bold text-white uppercase tracking-wider">
+            {overlayMode === "pass" && "Pass Network Layer"}
+            {overlayMode === "heat" && "Half-Space Heatmap"}
+            {overlayMode === "shots" && "Shots & xG Map"}
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="text-[11px] font-semibold text-[#9CA3AF] px-2.5 py-1 rounded bg-[#0D0D10]/80 border border-[#262630]">
-            Attacking End: <span className="text-[#C8102E] font-bold">The Kop (Right ➔)</span>
+        <div className="flex items-center gap-2 self-end sm:self-auto">
+          <div className="text-[10px] sm:text-[11px] font-semibold text-[#9CA3AF] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded bg-[#0D0D10]/80 border border-[#262630]">
+            The Kop: <span className="text-[#C8102E] font-bold">Right ➔</span>
           </div>
           {selectedPlayer && (
             <button
               onClick={() => setSelectedPlayer(null)}
               className="text-[10px] text-[#00B2A9] hover:underline cursor-pointer bg-[#00B2A9]/10 px-2 py-0.5 rounded border border-[#00B2A9]/30"
             >
-              Reset Focus
+              Reset
             </button>
           )}
         </div>
       </div>
 
-      {/* SVG Canvas Area */}
-      <div className="relative flex-1 w-full flex items-center justify-center">
+      {/* SVG Canvas Area with horizontal scroll wrapper for very narrow screens */}
+      <div className="relative flex-1 w-full flex items-center justify-center overflow-x-auto">
         <svg
           viewBox="0 0 105 68"
-          className="w-full h-full max-h-[500px] object-contain drop-shadow-[0_0_20px_rgba(0,178,169,0.06)]"
+          className="w-full h-auto min-w-[320px] max-h-[480px] object-contain drop-shadow-[0_0_20px_rgba(0,178,169,0.06)]"
         >
           <defs>
             {/* Pitch pattern / gradient */}
@@ -296,13 +296,9 @@ export default function PitchCanvas({
           {/* ═══════ OVERLAY MODE 2: ATTACKING HEATMAP ═══════ */}
           {overlayMode === "heat" && (
             <g id="heatmap-layer">
-              {/* Right Half-space Salah & Trent Overload */}
               <ellipse cx="80" cy="54" rx="16" ry="10" fill="url(#heatKopRight)" />
-              {/* Left Wing Díaz Iso channel */}
               <ellipse cx="76" cy="16" rx="14" ry="9" fill="url(#heatKopLeft)" />
-              {/* Golden Central Danger Zone */}
               <circle cx="89" cy="34" r="11" fill="url(#heatBoxCentre)" />
-              {/* Build up progression hub */}
               <ellipse cx="48" cy="34" rx="12" ry="14" fill="#00B2A9" fillOpacity="0.12" />
 
               <text x="80" y="58" textAnchor="middle" fill="#FFFFFF" fontSize="2.2" fontWeight="bold">
@@ -350,27 +346,26 @@ export default function PitchCanvas({
       </div>
 
       {/* Legend & Selected Player Quick Peek */}
-      <div className="z-10 mt-2 pt-2 border-t border-[#262630] flex flex-wrap items-center justify-between text-xs text-[#9CA3AF] gap-2">
-        <div className="flex items-center gap-4">
+      <div className="z-10 mt-2 pt-2 border-t border-[#262630] flex flex-col sm:flex-row sm:items-center justify-between text-[10px] sm:text-xs text-[#9CA3AF] gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#C8102E]"></span>
-            <span>LFC Player Node</span>
+            <span>LFC Player</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-4 h-0.5 bg-[#C8102E]"></span>
-            <span>Passing Dyad (Thickness = Frequency)</span>
+            <span className="w-3.5 h-0.5 bg-[#C8102E]"></span>
+            <span>Passing Dyad</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#00B2A9]"></span>
-            <span>Active / Spotlighted Lane</span>
+            <span>Spotlight</span>
           </div>
         </div>
 
         {selectedPlayer && (
-          <div className="flex items-center gap-2 bg-[#141419] px-2.5 py-1 rounded border border-[#262630] text-white">
+          <div className="flex items-center gap-1.5 bg-[#141419] px-2 py-1 rounded border border-[#262630] text-white self-start sm:self-auto flex-wrap">
             <span className="text-[#C8102E] font-bold">#{selectedPlayer.number} {selectedPlayer.name}</span>
             <span className="text-[#9CA3AF]">|</span>
-            <span>{selectedPlayer.pos}</span>
             <span className="text-[#00B2A9] font-mono">OBV: +{selectedPlayer.obv.toFixed(2)}</span>
             <span className="text-[#9CA3AF]">|</span>
             <span>Acc: {selectedPlayer.comp}%</span>
